@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steepleview House | Surroundings</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+    }
+
+    main {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Intro section */
+    .page-intro {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-intro h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      color: #2b4d2b;
+    }
+    .page-intro h2 {
+      color: #3a7a3a;
+      margin-top: 10px;
+      font-weight: normal;
+    }
+    .page-intro p {
+      font-size: 1.1em;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Filters styling */
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .filters input,
+    .filters select {
+      padding: 10px 14px;
+      font-size: 15px;
+      border: 2px solid #3a7a3a;
+      border-radius: 25px;
+      outline: none;
+      background: #fff;
+      transition: 0.2s;
+    }
+    .filters input:focus,
+    .filters select:focus {
+      box-shadow: 0 0 5px rgba(58, 122, 58, 0.5);
+    }
+    .filters button {
+      padding: 10px 18px;
+      font-size: 15px;
+      border: 2px solid #3a7a3a;
+      border-radius: 25px;
+      background: #3a7a3a;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filters button:hover {
+      background: #2e612e;
+    }
+
+    /* Map */
+    #map {
+      height: 600px;
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Keep Leaflet controls below header */
+    .leaflet-control-container {
+      z-index: 1 !important;
+    }
+
+    /* Places grid */
+    .place-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+
+    /* Place card with background image overlay and hover effect */
+    .place-card {
+      background: white; /* fallback if no image */
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 350px;
+      text-align: left;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      min-height: 220px; /* ensures enough space for text over image */
+      padding: 18px 22px; /* more padding for readability */
+    }
+
+    /* Darker overlay to make text easier to read */
+    .place-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.55); /* stronger overlay */
+      z-index: 0;
+    }
+
+    /* Make all inner text above the overlay */
+    .place-card * {
+      position: relative;
+      z-index: 1;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* subtle text shadow */
+    }
+
+    /* Hover effect */
+    .place-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Text styling */
+    .place-card h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+    .place-card p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #fff;
+    }
+    .place-card a {
+      color: #fff;
+      text-decoration: underline;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      display: inline-block;
+      max-width: 100%;
+    }
+    .place-card a:hover {
+      color: #d4f0d4;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body class="innerpage">
+
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Steepleview House Logo" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">Rooms</a></li>
+          <li><a href="book.html">Book</a></li>
+          <li><a href="surroundings.html" class="active">Surroundings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-intro">
+      <h1>Around Our Area</h1>
+      <h2>Explore the Best of the Black Forest</h2>
+      <p>
+        Discover charming towns, scenic trails, cozy restaurants, and unique attractions — all just moments away from Steepleview House.
+      </p>
+    </section>
+
+    <div class="filters">
+      <input type="text" id="filterName" placeholder="Search by name" />
+      <select id="filterCategory">
+        <option value="">All Categories</option>
+        <option value="Activity">Activity</option>
+        <option value="Attraction">Attraction</option>
+        <option value="Nature">Nature</option>
+        <option value="Town">Town</option>
+      </select>
+      <input type="text" id="filterCity" placeholder="Search by city" />
+      <button id="clearFilters">Clear Filters</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div id="placeList" class="place-list"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Steepleview House. All rights reserved.</p>
+    <div class="socials">
+      <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+        <img src="images/facebook.png" alt="Facebook" />
+      </a>
+      <a href="https://www.instagram.com/steepleview_house" target="_blank">
+        <img src="images/instagram.png" alt="Instagram" />
+      </a>
+    </div>
+  </footer>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script>
+    const ourBusiness = {
+      name: "Steepleview House",
+      coords: [48.448545979797416, 8.233313789811467],
+      address: "Waltersweg 5, Bad Peterstal-Griesbach, Germany",
+      category: "Our Place",
+      description: "Your welcoming stay in the heart of the Black Forest"
+    };
+
+    const places = [
+      {
+        name: "Bad Peterstal-Griesbach",
+        category: "Town",
+        city: "Bad Peterstal-Griesbach",
+        address: "77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://www.bad-peterstal-griesbach.de/de/",
+        description: "Charming Black Forest town with shops, restaurants, and historic streets.",
+        coords: [48.42935519409351, 8.206217456723584]
+      },
+      {
+        name: "Strasbourg",
+        category: "Town",
+        city: "Strasbourg",
+        address: "67000 Strasbourg, France",
+        website: "https://www.visitstrasbourg.fr/en/welcome-in-strasbourg/",
+        description: "Beautiful city in France with medieval architecture and scenic canals.",
+        coords: [48.58342627106424, 7.745793185769838]
+      },
+      {
+        name: "Freiburg im Breisgau",
+        category: "Town",
+        city: "Freiburg im Breisgau",
+        address: "79098 Freiburg im Breisgau, Germany",
+        website: "https://visit.freiburg.de/en",
+        description: "Vibrant university city with a historic old town and scenic surroundings.",
+        coords: [47.99561749381487, 7.851952672601951]
+      },
+      {
+        name: "Stuttgart",
+        category: "Town",
+        city: "Stuttgart",
+        address: "70173 Stuttgart, Germany",
+        website: "https://www.stuttgart-tourist.de/en",
+        description: "Major city with automotive museums, parks, and cultural attractions.",
+        coords: [48.77857147046227, 9.179673969900348]
+      },
+      {
+        name: "Oberkirch",
+        category: "Town",
+        city: "Oberkirch",
+        address: "77704 Oberkirch, Germany",
+        website: "https://www.oberkirch.de/",
+        description: "Scenic town known for wine, local markets, and traditional charm.",
+        coords: [48.53104425484386, 8.079125578545293]
+      },
+      {
+        name: "Freudenstadt",
+        category: "Town",
+        city: "Freudenstadt",
+        address: "Marktplatz, 72250 Freudenstadt, Germany",
+        website: "https://www.freudenstadt.de/",
+        description: "Famous for the large market square and surrounding Black Forest trails.",
+        coords: [48.466, 8.414]
+      },
+      {
+        name: "Baden-Baden",
+        category: "Town",
+        city: "Baden-Baden",
+        address: "76530 Baden-Baden, Germany",
+        website: "https://www.baden-baden.de/",
+        description: "Elegant spa town with thermal baths, casinos, and scenic parks.",
+        coords: [48.761, 8.239]
+      },
+      {
+        name: "Karlsruhe",
+        category: "Town",
+        city: "Karlsruhe",
+        address: "76131 Karlsruhe, Germany",
+        website: "https://www.karlsruhe.de/",
+        description: "Dynamic city with modern architecture and cultural attractions.",
+        coords: [49.014, 8.404]
+      },
+      {
+        name: "Gengenbach",
+        category: "Town",
+        city: "Gengenbach",
+        address: "77723 Gengenbach, Germany",
+        website: "https://www.gengenbach.de/",
+        description: "Picturesque town with half-timbered houses and charming streets.",
+        coords: [48.414, 7.922]
+      },
+      {
+        name: "Wolfach",
+        category: "Town",
+        city: "Wolfach",
+        address: "77709 Wolfach, Germany",
+        website: "https://www.wolfach.de/",
+        description: "Traditional Black Forest town with artisanal workshops and scenic river views.",
+        coords: [48.345, 8.231]
+      },
+      {
+        name: "Himmelsteig Hike",
+        category: "Nature",
+        city: "Bad Peterstal-Griesbach",
+        address: "Bad Peterstal-Griesbach, Germany",
+        website: "",
+        description: "Scenic hiking trail through lush Black Forest landscapes.",
+        coords: [48.435, 8.209]
+      },
+      {
+        name: "Renchtalsteig Hike",
+        category: "Nature",
+        city: "Bad Peterstal-Griesbach",
+        address: "Bad Peterstal-Griesbach, Germany",
+        website: "",
+        description: "Challenging hiking route with beautiful valley views.",
+        coords: [48.44, 8.21]
+      },
+      {
+        name: "Teufelskanzelsteig Hike",
+        category: "Nature",
+        city: "Bad Peterstal-Griesbach",
+        address: "Bad Peterstal-Griesbach, Germany",
+        website: "",
+        description: "Dramatic cliffs and scenic viewpoints on this popular trail.",
+        coords: [48.442, 8.215]
+      },
+      {
+        name: "Habererturm",
+        category: "Nature",
+        city: "Freudenstadt",
+        address: "Freudenstadt, Germany",
+        website: "",
+        description: "Historic tower offering panoramic views over the Black Forest.",
+        coords: [48.47, 8.42]
+      },
+      {
+        name: "Allerheiligen Waterfalls",
+        category: "Nature",
+        city: "Oppenau",
+        address: "Klosterruine Allerheiligen, 77728 Oppenau, Germany",
+        website: "https://www.schwarzwald-tourismus.info/attraktionen/allerheiligen-wasserfaelle-oppeneau",
+        description: "Spectacular waterfalls with nearby monastery ruins.",
+        coords: [48.55, 8.25]
+      },
+      {
+        name: "Internationale Sommerskispringen",
+        category: "Nature",
+        city: "Bad Peterstal-Griesbach",
+        address: "Bad Peterstal-Griesbach, Germany",
+        website: "",
+        description: "International summer ski jumping event in the Black Forest.",
+        coords: [48.43, 8.205]
+      },
+      {
+        name: "Skilifte Kniebis",
+        category: "Nature",
+        city: "Freudenstadt",
+        address: "Freudenstadt, Germany",
+        website: "",
+        description: "Popular ski lift area for winter sports enthusiasts.",
+        coords: [48.48, 8.41]
+      },
+      {
+        name: "Skilifte Vogelskopf",
+        category: "Nature",
+        city: "Baiersbronn",
+        address: "Baiersbronn, Germany",
+        website: "",
+        description: "Ski resort offering slopes and winter activities.",
+        coords: [48.48, 8.47]
+      },
+      {
+        name: "Skilifte Zuflucht",
+        category: "Nature",
+        city: "Oppenau",
+        address: "Oppenau, Germany",
+        website: "",
+        description: "Ski lift with slopes for beginners and advanced skiers.",
+        coords: [48.455, 8.225]
+      },
+      {
+        name: "Schwarzwälder Freilichtmuseum Vogtsbauernhof",
+        category: "Activity",
+        city: "Gutach",
+        address: "Gutach, Germany",
+        website: "https://www.vogtsbauernhof.org/",
+        description: "Open-air museum showing traditional Black Forest life.",
+        coords: [48.295, 8.211]
+      },
+      {
+        name: "Alternativer Wolf- und Bärenpark Schwarzwald",
+        category: "Activity",
+        city: "Bad Rippoldsau-Schapbach",
+        address: "Bad Rippoldsau-Schapbach, Germany",
+        website: "https://www.wolf-und-baerenpark.de/",
+        description: "Wolf and bear sanctuary offering close wildlife encounters.",
+        coords: [48.393, 8.394]
+      },
+      {
+        name: "Deutsches Uhrenmuseum",
+        category: "Activity",
+        city: "Furtwangen",
+        address: "Furtwangen, Germany",
+        website: "https://www.deutsches-uhrenmuseum.de/",
+        description: "Museum dedicated to clocks and watchmaking history.",
+        coords: [48.058, 8.222]
+      },
+      {
+        name: "Monkey Mountain",
+        category: "Attraction",
+        city: "Kintzheim",
+        address: "Kintzheim, France",
+        website: "https://www.monkey-mountain.com/",
+        description: "Outdoor park to see monkeys in naturalistic habitats.",
+        coords: [48.362, 7.434]
+      },
+      {
+        name: "Durbacher Winery",
+        category: "Activity",
+        city: "Durbach",
+        address: "Durbach, Germany",
+        website: "",
+        description: "Local winery producing Black Forest wines, open for tours and tastings.",
+        coords: [48.522, 8.05]
+      },
+      {
+        name: "Oberkircher Winzer",
+        category: "Activity",
+        city: "Oberkirch",
+        address: "Oberkirch, Germany",
+        website: "",
+        description: "Traditional winery showcasing regional grape varieties and tastings.",
+        coords: [48.531, 8.079]
+      },
+      {
+        name: "Waldulmer",
+        category: "Activity",
+        city: "Oberkirch",
+        address: "Oberkirch, Germany",
+        website: "",
+        description: "Black Forest winery with historic vineyards and wine tasting events.",
+        coords: [48.532, 8.080]
+      },
+      {
+        name: "Weingut Börsig",
+        category: "Activity",
+        city: "Oberkirch",
+        address: "Oberkirch, Germany",
+        website: "",
+        description: "Family-owned vineyard offering wines and regional specialties.",
+        coords: [48.533, 8.082]
+      },
+      {
+        name: "Baden Wine Route",
+        category: "Activity",
+        city: "Baden-Württemberg",
+        address: "Baden, Germany",
+        website: "",
+        description: "Scenic route through vineyards with tasting opportunities and wine festivals.",
+        coords: [48.6, 8.2]
+      },
+      {
+        name: "Alsace Wine Route",
+        category: "Activity",
+        city: "Alsace",
+        address: "Alsace, France",
+        website: "",
+        description: "Famous wine route through Alsace villages and vineyards.",
+        coords: [48.3, 7.5]
+      },
+      {
+        name: "BOAR Distillery",
+        category: "Activity",
+        city: "Baden-Württemberg",
+        address: "Baden, Germany",
+        website: "",
+        description: "Local distillery offering tastings of spirits and liqueurs.",
+        coords: [48.61, 8.25]
+      },
+      {
+        name: "Braurerei Alpirsbacher",
+        category: "Activity",
+        city: "Alpirsbach",
+        address: "Alpirsbach, Germany",
+        website: "",
+        description: "Historic brewery producing traditional Black Forest beers.",
+        coords: [48.36, 8.38]
+      },
+      {
+        name: "Ketterer Brewery",
+        category: "Activity",
+        city: "Baiersbronn",
+        address: "Baiersbronn, Germany",
+        website: "",
+        description: "Family-run brewery with local beer specialties and tours.",
+        coords: [48.47, 8.48]
+      },
+      {
+        name: "Freibad Bad Peterstal-Griesbach",
+        category: "Activity",
+        city: "Bad Peterstal-Griesbach",
+        address: "Bad Peterstal-Griesbach, Germany",
+        website: "",
+        description: "Outdoor swimming pool with leisure and family facilities.",
+        coords: [48.43, 8.21]
+      },
+      {
+        name: "Freizeitbad Oppenau",
+        category: "Activity",
+        city: "Oppenau",
+        address: "Oppenau, Germany",
+        website: "",
+        description: "Indoor water park with pools, slides, and wellness areas.",
+        coords: [48.55, 8.25]
+      },
+      {
+        name: "Swimming Pool Oberkirch",
+        category: "Activity",
+        city: "Oberkirch",
+        address: "Oberkirch, Germany",
+        website: "",
+        description: "Public swimming facility with indoor and outdoor pools.",
+        coords: [48.531, 8.079]
+      },
+      {
+        name: "Panorama-Bad Freudenstadt",
+        category: "Activity",
+        city: "Freudenstadt",
+        address: "Freudenstadt, Germany",
+        website: "",
+        description: "Modern leisure pool with wellness and panoramic views.",
+        coords: [48.466, 8.414]
+      },
+      {
+        name: "Caracalla Therme",
+        category: "Activity",
+        city: "Baden-Baden",
+        address: "Baden-Baden, Germany",
+        website: "https://www.carasana.de/en/caracalla-therme.html",
+        description: "Luxurious thermal baths with saunas, pools, and spa treatments.",
+        coords: [48.76, 8.239]
+      },
+      {
+        name: "Keidel Bad",
+        category: "Activity",
+        city: "Freiburg",
+        address: "Freiburg, Germany",
+        website: "https://www.keidel-bad.de/",
+        description: "Public spa with thermal pools and wellness facilities.",
+        coords: [47.995, 7.852]
+      },
+      {
+        name: "Europapark",
+        category: "Attraction",
+        city: "Rust",
+        address: "Europa-Park-Straße 2, 77977 Rust, Germany",
+        website: "https://www.europapark.de/en",
+        description: "Germany’s largest theme park with rides, shows, and themed areas.",
+        coords: [48.266, 7.721]
+      },
+      {
+        name: "LEGOLAND Germany",
+        category: "Attraction",
+        city: "Günzburg",
+        address: "LEGOLAND-Allee 1, 89312 Günzburg, Germany",
+        website: "https://www.legoland.de/en/",
+        description: "Family-friendly theme park with LEGO-themed rides and attractions.",
+        coords: [48.456, 10.285]
+      },
+      {
+        name: "Sommerrodelbahn Gutach",
+        category: "Attraction",
+        city: "Gutach",
+        address: "Sommerrodelbahn Gutach, Germany",
+        website: "",
+        description: "Exciting summer toboggan run in the Black Forest for all ages.",
+        coords: [48.314, 8.188]
+      },
+      {
+        name: "Porsche Museum",
+        category: "Attraction",
+        city: "Stuttgart",
+        address: "Porscheplatz 1, 70435 Stuttgart, Germany",
+        website: "https://www.porsche.com/museum/en/",
+        description: "Museum showcasing Porsche’s history, cars, and exhibitions.",
+        coords: [48.783, 9.183]
+      },
+      {
+        name: "BMW Museum",
+        category: "Attraction",
+        city: "Stuttgart",
+        address: "Am Olympiapark 1, 80809 Stuttgart, Germany",
+        website: "https://www.bmw-welt.com/en/museum.html",
+        description: "Explore BMW’s automotive history, vehicles, and technology.",
+        coords: [48.785, 9.181]
+      },
+      {
+        name: "Black Forest Open-Air Museum Vogtsbauernhof",
+        category: "Activity",
+        city: "Gutach",
+        address: "Gutach, Germany",
+        website: "https://www.vogtsbauernhof.org/",
+        description: "Open-air museum with historic Black Forest houses and seasonal workshops.",
+        coords: [48.295, 8.211],
+        image: "images/vogtsbauernhof.jpg"
+      },
+      {
+        name: "Lake Titisee",
+        category: "Nature",
+        city: "Titisee-Neustadt",
+        address: "Titisee, Germany",
+        website: "https://www.titisee.de/en/",
+        description: "Scenic lake with walking paths, boating, and lakeside cafes.",
+        coords: [47.906, 8.123],
+        image: "images/titisee.jpg"
+      },
+      {
+        name: "Schwarzwaldhochstraße Scenic Drive",
+        category: "Nature",
+        city: "Baden-Baden",
+        address: "B500, Baden-Württemberg, Germany",
+        website: "",
+        description: "Panoramic road through the Black Forest with breathtaking viewpoints.",
+        coords: [48.683, 8.23],
+        image: "images/schwarzwaldhochstrasse.jpg"
+      },
+      {
+        name: "Hohenzollern Castle",
+        category: "Attraction",
+        city: "Bisingen",
+        address: "Hohenzollern, Germany",
+        website: "https://www.burg-hohenzollern.com/en/",
+        description: "Fairytale castle perched on a hilltop, rich in history and architecture.",
+        coords: [48.306, 8.967],
+        image: "images/hohenzollern.jpg"
+      },
+      {
+        name: "Mummelsee Lake",
+        category: "Nature",
+        city: "Seebach",
+        address: "Seebach, Germany",
+        website: "https://www.mummelsee.de/en/",
+        description: "Small alpine lake with walking paths, pedal boats, and cafes.",
+        coords: [48.552, 8.262],
+        image: "images/mummelsee.jpg"
+      },
+      {
+        name: "Feldberg Mountain",
+        category: "Nature",
+        city: "Feldberg",
+        address: "Feldberg, Germany",
+        website: "https://www.feldberg-blackforest.de/en/",
+        description: "Highest mountain in the Black Forest, popular for hiking and skiing.",
+        coords: [47.876, 8.004],
+        image: "images/feldberg.jpg"
+      },
+      {
+        name: "Lotharpfad Trail",
+        category: "Nature",
+        city: "Baiersbronn",
+        address: "72270 Baiersbronn, Germany",
+        website: "https://www.nationalpark-schwarzwald.de/erleben/unterwegs-im-park/erlebnispfade/lotharpfad",
+        description: "Forest & moorland hiking trail on boardwalks, with mountain views from an observation platform. Highlighting nature’s recovery after the 1999 storm Lothar.",
+        coords: [48.50671598361399, 8.223216697846539],
+        image: "images/surroundings/lotharpfad.jpg"
+      }
+    ];
+
+
+    const icons = {
+      Restaurant: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+      Attraction: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+      Nature: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+      Town: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/yellow-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+      Activity: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/purple-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+      Store: L.icon({
+        iconUrl: "https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png",
+        iconSize: [28, 28],
+        iconAnchor: [14, 28]
+      }),
+    };
+
+    let map;
+    let markers = [];
+
+    window.onload = function () {
+      map = L.map("map").setView(ourBusiness.coords, 13);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      const starIcon = L.icon({
+        iconUrl: "images/star.svg",
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+      });
+
+      L.marker(ourBusiness.coords, { icon: starIcon })
+        .addTo(map)
+        .bindPopup(`<b>${ourBusiness.name}</b><br>${ourBusiness.address}`);
+
+      renderMarkers(places);
+      renderPlaceList(places);
+    };
+
+    function renderMarkers(data) {
+      markers.forEach((m) => map.removeLayer(m));
+      markers = [];
+
+      data.forEach((place) => {
+        const icon = icons[place.category] || icons["Town"];
+        const marker = L.marker(place.coords, { icon }).addTo(map);
+
+        let popupHtml = `
+          <b>${place.name}</b><br>
+          ${place.address}<br>
+          <i>${place.category}</i><br>
+          ${place.description}
+        `;
+        if (place.website) {
+          popupHtml += `<br><a href="${place.website}" target="_blank" style="word-break: break-word;">Website</a>`;
+        }
+
+        marker.bindPopup(popupHtml);
+        markers.push(marker);
+      });
+    }
+
+    function renderPlaceList(data) {
+      const list = document.getElementById("placeList");
+      list.innerHTML = "";
+
+      data.forEach((place) => {
+        const card = document.createElement("div");
+        card.className = "place-card";
+
+        // Add background image if available
+        if (place.image) {
+          card.style.backgroundImage = `url(${place.image})`;
+          card.style.backgroundSize = "cover";
+          card.style.backgroundPosition = "center";
+        } else {
+          card.style.backgroundColor = "#fff"; // fallback
+          card.style.color = "#333";
+        }
+
+        let html = `
+          <h3>${place.name}</h3>
+          <p><b>Category:</b> ${place.category}</p>
+          <p><b>City:</b> ${place.city}</p>
+          <p><b>Address:</b> ${place.address}</p>
+          <p>${place.description}</p>
+        `;
+        if (place.website) {
+          html += `<p><a href="${place.website}" target="_blank">Website</a></p>`;
+        }
+
+        card.innerHTML = html;
+
+        card.addEventListener("click", () => {
+          const matching = markers.find((m) => {
+            const latlng = m.getLatLng();
+            return latlng.lat === place.coords[0] && latlng.lng === place.coords[1];
+          });
+          if (matching) {
+            matching.openPopup();
+            map.panTo(matching.getLatLng());
+          }
+        });
+
+        list.appendChild(card);
+      });
+    }
+
+
+    const filterNameEl = document.getElementById("filterName");
+    const filterCategoryEl = document.getElementById("filterCategory");
+    const filterCityEl = document.getElementById("filterCity");
+    const clearBtn = document.getElementById("clearFilters");
+
+    [filterNameEl, filterCityEl].forEach((el) =>
+      el.addEventListener("input", applyFilters)
+    );
+    filterCategoryEl.addEventListener("change", applyFilters);
+    clearBtn.addEventListener("click", () => {
+      filterNameEl.value = "";
+      filterCategoryEl.value = "";
+      filterCityEl.value = "";
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const nameFilter = filterNameEl.value.toLowerCase();
+      const categoryFilter = filterCategoryEl.value;
+      const cityFilter = filterCityEl.value.toLowerCase();
+
+      const filtered = places.filter((place) => {
+        const matchesName = place.name.toLowerCase().includes(nameFilter);
+        const matchesCategory = categoryFilter
+          ? place.category === categoryFilter
+          : true;
+        const matchesCity = place.city.toLowerCase().includes(cityFilter);
+        return matchesName && matchesCategory && matchesCity;
+      });
+
+      renderMarkers(filtered);
+      renderPlaceList(filtered);
+    }
+  </script>
+</body>
+</html>
