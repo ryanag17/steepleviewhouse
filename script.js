@@ -130,13 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// Responsive menu toggle
+// Mobile menu toggle logic
 document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('header nav');
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.navbar nav');
 
-  if (toggleBtn && nav) {
-    toggleBtn.addEventListener('click', () => {
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
       nav.classList.toggle('active');
     });
   }
