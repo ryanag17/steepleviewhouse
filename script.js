@@ -118,31 +118,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startAuto();
   });
-
-
-  /* ==========================================
-     RESPONSIVE NAVBAR TOGGLE
-     ========================================== */
-  const toggle = document.querySelector('.menu-toggle');
-  const navList = document.querySelector('nav ul');
-
-  if (toggle && navList) {
-    // Create overlay element once
-    const overlay = document.createElement('div');
-    overlay.classList.add('mobile-overlay');
-    document.body.appendChild(overlay);
-
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('active');
-      navList.classList.toggle('open');
-      overlay.classList.toggle('show');
-    });
-
-    overlay.addEventListener('click', () => {
-      toggle.classList.remove('active');
-      navList.classList.remove('open');
-      overlay.classList.remove('show');
-    });
-  }
-
 });
