@@ -1,9 +1,9 @@
-// script.js - REPLACE YOUR OLD FILE WITH THIS
+// script.js — FINAL COMBINED VERSION
 
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ==========================
-     LIGHTBOX (unchanged logic)
+     LIGHTBOX
      ========================== */
   const thumbs = Array.from(document.querySelectorAll('.gallery-thumb'));
   const lightbox = document.getElementById('lightbox');
@@ -33,9 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     Unified Gallery / Slideshow manager
+     GALLERY / SLIDESHOW MANAGER
      ========================================== */
-
   const galleries = document.querySelectorAll('.apartment-gallery');
 
   galleries.forEach((gallery) => {
@@ -63,28 +62,24 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.addEventListener('click', (e) => {
         const idx = Number(e.currentTarget.dataset.index);
         showSlide(idx);
-        restartAuto(); // keep implicit user interactions in sync with auto timer
+        restartAuto();
       });
       dotsContainer.appendChild(dot);
     });
 
     const dots = Array.from(dotsContainer.querySelectorAll('.gallery-dot'));
 
-    // Initialize classes based on markup — ensure exactly one active
+    // Initialize first image
     images.forEach((img, i) => {
       img.classList.toggle('active', i === 0);
     });
 
     function showSlide(index) {
-      const nextIndex = ((index % images.length) + images.length) % images.length; // normalize
-      // remove old actives
+      const nextIndex = ((index % images.length) + images.length) % images.length;
       images[currentIndex].classList.remove('active');
       dots[currentIndex].classList.remove('active');
-
-      // set new actives
       images[nextIndex].classList.add('active');
       dots[nextIndex].classList.add('active');
-
       currentIndex = nextIndex;
     }
 
@@ -96,11 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
       showSlide(currentIndex - 1);
     }
 
-    // Prev / Next buttons
     if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); restartAuto(); });
     if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); restartAuto(); });
 
-    // Auto slide management
     function startAuto() {
       stopAuto();
       intervalId = setInterval(nextSlide, AUTO_MS);
@@ -120,12 +113,36 @@ document.addEventListener('DOMContentLoaded', () => {
       startAuto();
     }
 
-    // Pause on hover and resume
     gallery.addEventListener('mouseenter', stopAuto);
     gallery.addEventListener('mouseleave', startAuto);
 
-    // Start automatic rotation
     startAuto();
   });
+
+
+  /* ==========================================
+     RESPONSIVE NAVBAR TOGGLE
+     ========================================== */
+  const toggle = document.querySelector('.menu-toggle');
+  const navList = document.querySelector('nav ul');
+
+  if (toggle && navList) {
+    // Create overlay element once
+    const overlay = document.createElement('div');
+    overlay.classList.add('mobile-overlay');
+    document.body.appendChild(overlay);
+
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+      navList.classList.toggle('open');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', () => {
+      toggle.classList.remove('active');
+      navList.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+  }
 
 });
