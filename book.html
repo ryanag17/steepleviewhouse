@@ -155,7 +155,11 @@
 
     // Function to validate and submit the form
     function validateBookingForm(e) {
+      // Prevent the default form submit action
       e.preventDefault();
+      
+      console.log('Form submission intercepted');  // Debugging log to check if the form is actually being intercepted
+
       const form = document.querySelector('.booking-form');
 
       // Clear old errors
