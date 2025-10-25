@@ -1,9 +1,7 @@
-// script.js — FINAL COMBINED VERSION
-
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ==========================
-     LIGHTBOX
+     LIGHTBOX (unchanged logic)
      ========================== */
   const thumbs = Array.from(document.querySelectorAll('.gallery-thumb'));
   const lightbox = document.getElementById('lightbox');
@@ -33,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     GALLERY / SLIDESHOW MANAGER
+     Unified Gallery / Slideshow manager
      ========================================== */
+
   const galleries = document.querySelectorAll('.apartment-gallery');
 
   galleries.forEach((gallery) => {
@@ -45,15 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!images.length || !dotsContainer) return;
 
-    // Configuration
-    const AUTO_MS = 4000; // auto slide time (ms)
+    const AUTO_MS = 4000;
     let currentIndex = 0;
     let intervalId = null;
 
-    // Ensure dotsContainer is empty (prevent duplicates if re-run)
     dotsContainer.innerHTML = '';
 
-    // Create dots matching images
     images.forEach((_, i) => {
       const dot = document.createElement('div');
       dot.classList.add('gallery-dot');
@@ -69,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const dots = Array.from(dotsContainer.querySelectorAll('.gallery-dot'));
 
-    // Initialize first image
     images.forEach((img, i) => {
       img.classList.toggle('active', i === 0);
     });
@@ -78,8 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const nextIndex = ((index % images.length) + images.length) % images.length;
       images[currentIndex].classList.remove('active');
       dots[currentIndex].classList.remove('active');
+
       images[nextIndex].classList.add('active');
       dots[nextIndex].classList.add('active');
+
       currentIndex = nextIndex;
     }
 
@@ -118,4 +115,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startAuto();
   });
+
 });

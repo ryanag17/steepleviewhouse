@@ -17,7 +17,7 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #f8f9fa;
       margin: 0;
     }
@@ -28,7 +28,6 @@
       margin: 0 auto;
     }
 
-    /* Intro section */
     .page-intro {
       text-align: center;
       margin-bottom: 40px;
@@ -51,7 +50,6 @@
       line-height: 1.6;
     }
 
-    /* Filters styling */
     .filters {
       display: flex;
       justify-content: center;
@@ -87,7 +85,6 @@
       background: #2e612e;
     }
 
-    /* Map */
     #map {
       height: 600px;
       width: 100%;
@@ -97,12 +94,10 @@
       z-index: 0;
     }
 
-    /* Keep Leaflet controls below header */
     .leaflet-control-container {
       z-index: 1 !important;
     }
 
-    /* Places grid */
     .place-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -110,9 +105,8 @@
       justify-items: center;
     }
 
-    /* Place card with background image overlay and hover effect */
     .place-card {
-      background: white; /* fallback if no image */
+      background: white;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       width: 100%;
@@ -122,33 +116,29 @@
       position: relative;
       overflow: hidden;
       color: white;
-      min-height: 220px; /* ensures enough space for text over image */
-      padding: 18px 22px; /* more padding for readability */
+      min-height: 220px;
+      padding: 18px 22px;
     }
 
-    /* Darker overlay to make text easier to read */
     .place-card::before {
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.55); /* stronger overlay */
+      background: rgba(0,0,0,0.55);
       z-index: 0;
     }
 
-    /* Make all inner text above the overlay */
     .place-card * {
       position: relative;
       z-index: 1;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* subtle text shadow */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
 
-    /* Hover effect */
     .place-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    /* Text styling */
     .place-card h3 {
       margin-top: 0;
       color: #fff;
@@ -180,7 +170,7 @@
 <body class="innerpage">
 
   <header>
-    <div class="menu-toggle">
+    <div class="navbar">
       <a href="index.html" class="logo">
         <img src="images/logo.png" alt="Steepleview House Logo" />
       </a>
@@ -223,16 +213,28 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Steepleview House. All rights reserved.</p>
-    <div class="socials">
-      <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
-        <img src="images/facebook.png" alt="Facebook" />
-      </a>
-      <a href="https://www.instagram.com/steepleview_house" target="_blank">
-        <img src="images/instagram.png" alt="Instagram" />
-      </a>
+    <div class="footer-line">
+      <div class="links">
+        <a href="about-us.html">About Us</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+          <img src="images/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/steepleview_house" target="_blank">
+          <img src="images/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2025 Steepleview House. All rights reserved.</p>
     </div>
   </footer>
+
+</body>
+</html>
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -255,10 +257,10 @@
         category: "Town",
         city: "Freiburg im Breisgau",
         address: "79098 Freiburg im Breisgau, Germany",
-        website: "https://visit.freiburg.de/en",
-        description: "Vibrant university city with a historic old town and scenic surroundings.",
+        website: "https://visit.freiburg.de/",
+        description: "Vibrant university city with a historic old town, scenic surroundings, and sunny weather.",
         coords: [47.99561749381487, 7.851952672601951],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        image: "images/surroundings/freiburg.jpg"
       },
       {
         name: "Strasbourg",
@@ -266,19 +268,19 @@
         city: "Strasbourg",
         address: "67000 Strasbourg, France",
         website: "https://www.visitstrasbourg.fr/en/welcome-in-strasbourg/",
-        description: "Beautiful city in France with medieval architecture and scenic canals.",
+        description: "Beautiful city in France with medieval architecture and scenic canals, including the iconic Strasbourg Cathedral.",
         coords: [48.58342627106424, 7.745793185769838],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        image: "images/surroundings/strasbourg.jpg"
       },
       {
         name: "Stuttgart",
         category: "Town",
         city: "Stuttgart",
         address: "70173 Stuttgart, Germany",
-        website: "https://www.stuttgart-tourist.de/en",
-        description: "Major city with automotive museums, parks, and cultural attractions.",
-        coords: [48.77857147046227, 9.179673969900348],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        website: "https://www.stuttgart-tourist.de/",
+        description: "Major city home to world-renowned museums, stunning parks, and the headquarters of iconic car manufacturers.",
+        coords: [48.77850740978604, 9.179663609096401],
+        image: "images/surroundings/stuttgart.jpg"
       },
       {
         name: "Oberkirch",
@@ -286,29 +288,29 @@
         city: "Oberkirch",
         address: "77704 Oberkirch, Germany",
         website: "https://www.oberkirch.de/",
-        description: "Scenic town known for wine, local markets, and traditional charm.",
-        coords: [48.53104425484386, 8.079125578545293],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        description: "Picturesque town in the Black Forest region, famous for its wine production, charming streets, and scenic views of the surrounding hills.",
+        coords: [48.530960937530104, 8.078607295930533],
+        image: "images/surroundings/oberkirch.jpg"
       },
       {
         name: "Freudenstadt",
         category: "Town",
         city: "Freudenstadt",
-        address: "Marktplatz, 72250 Freudenstadt, Germany",
-        website: "https://www.freudenstadt.de/",
-        description: "Famous for the large market square and surrounding Black Forest trails.",
-        coords: [48.466, 8.414],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "72250 Freudenstadt, Germany",
+        website: "https://www.freudenstadt.de/willkommen",
+        description: "Famous for the largest market square in Germany and its surrounding Black Forest trails.",
+        coords: [48.46441347460391, 8.411867544421447],
+        image: "images/surroundings/freudenstadt.jpg"
       },
       {
         name: "Baden-Baden",
         category: "Town",
         city: "Baden-Baden",
         address: "76530 Baden-Baden, Germany",
-        website: "https://www.baden-baden.de/",
+        website: "https://www.baden-baden.com/",
         description: "Elegant spa town with thermal baths, casinos, and scenic parks.",
-        coords: [48.761, 8.239],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        coords: [48.761091425215795, 8.239998028746587],
+        image: "images/surroundings/badenbaden.jpg"
       },
       {
         name: "Karlsruhe",
@@ -316,93 +318,93 @@
         city: "Karlsruhe",
         address: "76131 Karlsruhe, Germany",
         website: "https://www.karlsruhe.de/",
-        description: "Dynamic city with modern architecture and cultural attractions.",
-        coords: [49.014, 8.404],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        description: "City with modern architecture and cultural attractions with the expansive Palace Gardens surrounding the Karlsruhe Palace.",
+        coords: [49.01176483837934, 8.404173444763865],
+        image: "images/surroundings/karlsruhe.jpg"
       },
       {
         name: "Gengenbach",
         category: "Town",
         city: "Gengenbach",
         address: "77723 Gengenbach, Germany",
-        website: "https://www.gengenbach.de/",
-        description: "Picturesque town with half-timbered houses and charming streets.",
-        coords: [48.414, 7.922],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        website: "https://www.gengenbach.info/",
+        description: "Picturesque town with half-timbered houses and charming cobblestone streets.",
+        coords: [48.40406360033158, 8.015271626730545],
+        image: "images/surroundings/gengenbach.jpg"
       },
       {
         name: "Wolfach",
         category: "Town",
         city: "Wolfach",
         address: "77709 Wolfach, Germany",
-        website: "https://www.wolfach.de/",
-        description: "Traditional Black Forest town with artisanal workshops and scenic river views.",
-        coords: [48.345, 8.231],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        website: "https://www.wolfach.de/startseite",
+        description: "A charming town known for its traditional half-timbered houses, scenic river views, and artisanal workshops.",
+        coords: [48.2988419933502, 8.222839591170914],
+        image: "images/surroundings/wolfach.jpg"
       },
       {
         name: "Himmelsteig Hike",
         category: "Nature",
         city: "Bad Peterstal-Griesbach",
-        address: "Bad Peterstal-Griesbach, Germany",
-        website: "",
-        description: "Scenic hiking trail through lush Black Forest landscapes.",
-        coords: [48.435, 8.209],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "Schwimmbadstraße 10, 77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://www.bad-peterstal-griesbach.de/de/tour/wanderung/himmelssteig-in-bad-peterstal-griesbach-eine-tour-fuer-hoehenverliebte/17558252/",
+        description: "Stretching approximately 11 km, this hike offers a challenging yet scenic journey through dense fir & mixed forests, with varied terrain of mossy, grassy, and root-covered paths.",
+        coords: [48.425148806994166, 8.211742241044998],
+        image: "images/surroundings/himmelsteig.jpg"
       },
       {
-        name: "Renchtalsteig Hike",
+        name: "Wiesensteig Hike",
         category: "Nature",
         city: "Bad Peterstal-Griesbach",
-        address: "Bad Peterstal-Griesbach, Germany",
-        website: "",
-        description: "Challenging hiking route with beautiful valley views.",
-        coords: [48.44, 8.21],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://www.bad-peterstal-griesbach.de/de/tour/wanderung/wiesensteig-in-bad-peterstal-griesbach-eine-tour-fuer-genusssucher/8801557/",
+        description: "13.5-km-long premium hiking trail winding its way around the 'Wilde Rench' valley.",
+        coords: [48.474738419454546, 8.253187258317435],
+        image: "images/surroundings/wiesensteig.jpeg"
       },
       {
         name: "Teufelskanzelsteig Hike",
         category: "Nature",
         city: "Bad Peterstal-Griesbach",
-        address: "Bad Peterstal-Griesbach, Germany",
-        website: "",
-        description: "Dramatic cliffs and scenic viewpoints on this popular trail.",
-        coords: [48.442, 8.215],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://www.bad-peterstal-griesbach.de/de/tour/wanderung/der-teufelskanzelsteig-in-bad-peterstal-griesbach-eine-tour-fuer/50352383/",
+        description: "7-km-long hike with magnificent views, impressive rock formations, waterfalls, and unmatched nature.",
+        coords: [48.447668854806956, 8.240172110892267],
+        image: "images/surroundings/teufelskanzelsteig.jpg"
       },
       {
-        name: "Habererturm",
+        name: "Haberer Turm",
         category: "Nature",
-        city: "Freudenstadt",
-        address: "Freudenstadt, Germany",
-        website: "",
-        description: "Historic tower offering panoramic views over the Black Forest.",
-        coords: [48.47, 8.42],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        city: "Bad Peterstal-Griesbach",
+        address: "Haberer Turm, 77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://www.bad-peterstal-griesbach.de/de/poi/aussichtsturm/haberer-turm/20897965/",
+        description: "A 16-meter-high tower, built in 1898, with a perfect view of the upper Rench Valley.",
+        coords: [48.447590220025255, 8.243837097357703],
+        image: "images/surroundings/habererturm.jpg"
       },
       {
         name: "Allerheiligen Waterfalls",
         category: "Nature",
         city: "Oppenau",
-        address: "Klosterruine Allerheiligen, 77728 Oppenau, Germany",
-        website: "https://www.schwarzwald-tourismus.info/attraktionen/allerheiligen-wasserfaelle-oppeneau",
-        description: "Spectacular waterfalls with nearby monastery ruins.",
-        coords: [48.55, 8.25],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "Allerheiligen, 77728 Oppenau, Germany",
+        website: "https://www.renchtal-tourismus.de/poi/5-wasserfaelle-allerheiligen/",
+        description: "Picturesque hiking area with waterfalls & medieval monastery ruins.",
+        coords: [48.52937462001522, 8.188275998015422],
+        image: "images/surroundings/allerheiligen.jpg"
       },
       {
-        name: "Internationale Sommerskispringen",
-        category: "Nature",
+        name: "Kreuzkopfschanzen (Sommerskispringen)",
+        category: "Activity",
         city: "Bad Peterstal-Griesbach",
-        address: "Bad Peterstal-Griesbach, Germany",
-        website: "",
-        description: "International summer ski jumping event in the Black Forest.",
-        coords: [48.43, 8.205],
-        image: "images/surroundings/vogtsbauernhof.jpg"
+        address: "Kapellenstraße 5, 77740 Bad Peterstal-Griesbach, Germany",
+        website: "https://skizunft-badgriesbach.de/",
+        description: "International summer ski jumping events in Bad Peterstal-Griesbach",
+        coords: [48.448720842720654, 8.239503297040246],
+        image: "images/surroundings/kreuzkopfschanzen.jpg"
       },
       {
         name: "Skilifte Vogelskopf",
-        category: "Nature",
+        category: "Activity",
         city: "Baiersbronn",
         address: "Ruhestein 6, 72270 Baiersbronn, Germany",
         website: "https://vogelskopf.de/skilift-vogelskopf/",
@@ -412,7 +414,7 @@
       },
       {
         name: "Skilifte Zuflucht",
-        category: "Nature",
+        category: "Activity",
         city: "Bad Peterstal-Griesbach",
         address: "Zuflucht 1, 72250 Bad Peterstal-Griesbach, Germany",
         website: "https://www.hotel-zuflucht.de/skilift-zuflucht/",
@@ -793,13 +795,12 @@
         const card = document.createElement("div");
         card.className = "place-card";
 
-        // Add background image if available
         if (place.image) {
           card.style.backgroundImage = `url(${place.image})`;
           card.style.backgroundSize = "cover";
           card.style.backgroundPosition = "center";
         } else {
-          card.style.backgroundColor = "#fff"; // fallback
+          card.style.backgroundColor = "#fff";
           card.style.color = "#333";
         }
 

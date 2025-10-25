@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steepleview House | Book</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body class="book-page">
+
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Steepleview House Logo" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">Rooms</a></li>
+          <li><a href="book.html" class="active">Book</a></li>
+          <li><a href="surroundings.html">Surroundings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rooms-hero book-hero">
+    <div class="hero-content">
+      <h1>Book Your Stay</h1>
+      <p class="rooms-desc">
+        Secure your perfect stay at Steepleview House in the heart of the Black Forest.
+      </p>
+    </div>
+  </section>
+
+  <section class="booking-section">
+    <h2>Book Now!</h2>
+    <p class="booking-desc">
+      To request a booking, please enter your inquiry and information in the form below!<br><br>
+      <strong>Note:</strong> Please check your spam folder for emails from Steepleview House!<br>
+      You can view availability of apartments & rooms in the calendars below this form.
+    </p>
+
+    <form class="booking-form" action="mailto:booksteepleviewhouse@gmail.com" method="POST" enctype="text/plain" onsubmit="return validateBookingForm(event)" novalidate>
+      <div class="form-group">
+        <label for="lastName">Last Name *</label>
+        <input type="text" id="lastName" name="Last Name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">First Name *</label>
+        <input type="text" id="firstName" name="First Name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="apartment">Apartment/Room Name *</label>
+        <select id="apartment" name="Apartment/Room" required>
+          <option value="">Select...</option>
+          <option>Schwarzwaldblick Apartment</option>
+          <option>Renchtalblick Apartment</option>
+          <option>Bad Griesbach Room</option>
+          <option>Bad Peterstal Room</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="guests">Amount of Guests *</label>
+        <input type="number" id="guests" name="Guests" min="1" required />
+      </div>
+
+      <div class="form-group">
+        <label for="arrival">Arrival Date *</label>
+        <input type="date" id="arrival" name="Arrival Date" required />
+      </div>
+
+      <div class="form-group">
+        <label for="departure">Departure Date *</label>
+        <input type="date" id="departure" name="Departure Date" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="Email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" name="Phone" pattern="\\+?[0-9\\- ]{7,15}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address *</label>
+        <textarea id="address" name="Address" rows="2" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Other Information</label>
+        <textarea id="message" name="Message" rows="3" placeholder="Anything else you’d like to let us know?"></textarea>
+      </div>
+
+      <button type="submit" class="btn">Send Booking Request</button>
+    </form>
+  </section>
+
+  <section class="calendar-section">
+    <h2>Availability Calendars</h2>
+    <div class="calendar-grid">
+      <div class="calendar-box">
+        <h3>Schwarzwaldblick Apartment</h3>
+        <iframe src="https://calendar.google.com/calendar/embed?src=booksteepleviewhouse%40gmail.com&ctz=Europe%2FBerlin" frameborder="0"></iframe>
+      </div>
+      <div class="calendar-box">
+        <h3>Renchtalblick Apartment</h3>
+        <iframe src="https://calendar.google.com/calendar/embed?src=769a738b3391f0fc5b3438b0efba5f2de3208c5d1afba8fbe425dc8b08047546%40group.calendar.google.com&ctz=Europe%2FBerlin" frameborder="0"></iframe>
+      </div>
+      <div class="calendar-box">
+        <h3>Bad Griesbach Room</h3>
+        <iframe src="https://calendar.google.com/calendar/embed?src=d2949503c8bf86f2ad297e85ce7bdc983aa9a00577481384f1723007df5a00cc%40group.calendar.google.com&ctz=Europe%2FBerlin" frameborder="0"></iframe>
+      </div>
+      <div class="calendar-box">
+        <h3>Bad Peterstal Room</h3>
+        <iframe src="https://calendar.google.com/calendar/embed?src=a88bc34865d29faf8c9a933522ea0474da0733faa8ea3fd7f2dd95b572c9592b%40group.calendar.google.com&ctz=Europe%2FBerlin" frameborder="0"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-line">
+      <div class="links">
+        <a href="about-us.html">About Us</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+          <img src="images/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/steepleview_house" target="_blank">
+          <img src="images/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2025 Steepleview House. All rights reserved.</p>
+    </div>
+  </footer>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+  // Initialize EmailJS with your public key
+  emailjs.init('G3_XHcF72rqVmTirs'); // replace with your EmailJS public key
+
+  function validateBookingForm(e) {
+    e.preventDefault();
+    const form = document.querySelector('.booking-form');
+
+    // Clear old errors
+    form.querySelectorAll('.error-msg').forEach(el => el.remove());
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+
+    // Field references
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const apartmentInput = document.getElementById('apartment');
+    const guestsInput = document.getElementById('guests');
+    const arrivalInput = document.getElementById('arrival');
+    const departureInput = document.getElementById('departure');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const addressInput = document.getElementById('address');
+    const messageInput = document.getElementById('message');
+
+    const arrival = new Date(arrivalInput.value);
+    const departure = new Date(departureInput.value);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let valid = true;
+
+  // === FIRST NAME ===
+  if (!firstNameInput.value.trim()) {
+    showError(firstNameInput, 'Please enter your first name.');
+    valid = false;
+  } else if (firstNameInput.value.trim().length < 2) {
+    showError(firstNameInput, 'First name must be at least 2 characters.');
+    valid = false;
+  }
+
+  // === LAST NAME ===
+  if (!lastNameInput.value.trim()) {
+    showError(lastNameInput, 'Please enter your last name.');
+    valid = false;
+  } else if (lastNameInput.value.trim().length < 2) {
+    showError(lastNameInput, 'Last name must be at least 2 characters.');
+    valid = false;
+  }
+
+  // === APARTMENT / ROOM ===
+  if (!apartmentInput.value.trim()) {
+    showError(apartmentInput, 'Please select an apartment or room.');
+    valid = false;
+  }
+
+  // === AMOUNT OF GUESTS ===
+  const guests = parseInt(guestsInput.value);
+  if (!guestsInput.value) {
+    showError(guestsInput, 'Please enter the number of guests.');
+    valid = false;
+  } else if (isNaN(guests) || guests < 1) {
+    showError(guestsInput, 'Number of guests must be at least 1.');
+    valid = false;
+  } else if (guests > 8) {
+    showError(guestsInput, 'Number of guests cannot exceed 8.');
+    valid = false;
+  }
+
+  // === ARRIVAL DATE ===
+  if (!arrivalInput.value) {
+    showError(arrivalInput, 'Please enter your arrival date.');
+    valid = false;
+  } else if (arrival < today) {
+    showError(arrivalInput, 'Arrival date must be today or in the future.');
+    valid = false;
+  }
+
+  // === DEPARTURE DATE ===
+  if (!departureInput.value) {
+    showError(departureInput, 'Please enter your departure date.');
+    valid = false;
+  } else if (departure < today) {
+    showError(departureInput, 'Departure date must be today or in the future.');
+    valid = false;
+  } else if (departure <= arrival) {
+    showError(departureInput, 'Departure date must be after the arrival date.');
+    valid = false;
+  }
+
+  // === EMAIL ===
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailInput.value.trim()) {
+    showError(emailInput, 'Please enter your email address.');
+    valid = false;
+  } else if (!emailPattern.test(emailInput.value.trim())) {
+    showError(emailInput, 'Please enter a valid email address.');
+    valid = false;
+  }
+
+  // === PHONE ===
+  const phonePattern = /^\+?[0-9\s\-()]{7,20}$/;
+  if (!phoneInput.value.trim()) {
+    showError(phoneInput, 'Please enter your phone number.');
+    valid = false;
+  } else if (!phonePattern.test(phoneInput.value.trim())) {
+    showError(phoneInput, 'Please enter a valid phone number (e.g. +49 170 4864851).');
+    valid = false;
+  }
+
+  // === ADDRESS ===
+  if (!addressInput.value.trim()) {
+    showError(addressInput, 'Please enter your address.');
+    valid = false;
+  } else if (addressInput.value.trim().length < 10) {
+    showError(addressInput, 'Please provide a more complete address (street, city, postal code).');
+    valid = false;
+  }
+
+// === SEND EMAIL USING EMAILJS ===
+  if (valid) {
+    const templateParams = {
+      firstName: firstNameInput.value,
+      lastName: lastNameInput.value,
+      apartment: apartmentInput.value,
+      guests: guestsInput.value,
+      arrival: arrivalInput.value,
+      departure: departureInput.value,
+      email: emailInput.value,
+      phone: phoneInput.value,
+      address: addressInput.value,
+      message: messageInput.value,
+      time: new Date().toLocaleString()
+    };
+
+    emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
+      .then(function(response) {
+        alert('Booking request sent successfully!');
+        form.reset();
+      }, function(error) {
+        alert('Failed to send booking request. Please try again later.');
+        console.error('EmailJS Error:', error);
+      });
+  }
+}
+
+function showError(input, message) {
+  const error = document.createElement('div');
+  error.classList.add('error-msg');
+  error.textContent = message;
+  input.classList.add('input-error');
+  input.insertAdjacentElement('afterend', error);
+}
+</script>
+
+</body>
+</html>
