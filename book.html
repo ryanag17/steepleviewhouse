@@ -104,6 +104,24 @@
 
       <button type="submit" class="btn">Send Booking Request</button>
     </form>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="popup">
+    <div class="popup-content">
+        <h2>Booking Request Sent!</h2>
+        <p>Your booking request has been successfully sent. We will get back to you shortly.</p>
+        <button id="closeSuccessPopup" class="btn">Ok</button>
+    </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div id="errorPopup" class="popup">
+    <div class="popup-content">
+        <h2>Booking Request Failed!</h2>
+        <p>There was an issue sending your request. Please try again later.</p>
+        <button id="closeErrorPopup" class="btn">Ok</button>
+    </div>
+    </div>
   </section>
 
   <section class="calendar-section">
@@ -264,15 +282,33 @@
           time: new Date().toLocaleString()  // Submit current time
         };
 
-        // Send the email via EmailJS
+        // Show Success Popup
+        function showSuccessPopup() {
+        const successPopup = document.getElementById('successPopup');
+        successPopup.style.display = 'flex'; // Make it visible
+        document.getElementById('closeSuccessPopup').addEventListener('click', function() {
+            successPopup.style.display = 'none';
+        });
+        }
+
+        // Show Error Popup
+        function showErrorPopup() {
+        const errorPopup = document.getElementById('errorPopup');
+        errorPopup.style.display = 'flex'; // Make it visible
+        document.getElementById('closeErrorPopup').addEventListener('click', function() {
+            errorPopup.style.display = 'none';
+        });
+        }
+
+        // Example of Success and Error Popup Trigger
         emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
-          .then(function(response) {
-            alert('Booking request sent successfully!');
-            form.reset();  // Reset the form after successful submission
-          }, function(error) {
-            alert('Failed to send booking request. Please try again later.');
+        .then(function(response) {
+            showSuccessPopup();  // Show success popup
+            form.reset();  // Reset the form
+        }, function(error) {
+            showErrorPopup();  // Show error popup
             console.error('EmailJS Error:', error);
-          });
+        });
       }
     }
 
