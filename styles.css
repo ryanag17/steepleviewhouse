@@ -1063,3 +1063,110 @@ footer .copyright {
 .policy-content li {
   margin-bottom: 1rem;
 }
+
+/* =========================================================
+   HEADER + NAVBAR (Mobile Fixes)
+   ========================================================= */
+
+/* Logo resizing for smaller screens */
+@media (max-width: 900px) {
+  .logo img {
+    height: 60px; /* Resize the logo for mobile */
+    width: auto;  /* Maintain aspect ratio */
+  }
+
+  .navbar {
+    display: flex;
+    flex-direction: column; /* Stack navbar items vertically on mobile */
+    align-items: center;
+    gap: 1rem;
+  }
+
+  nav ul {
+    display: none;  /* Initially hide the navbar links */
+    flex-direction: column;
+    width: 100%;
+    background-color: #fff;
+    padding: 2rem 1rem;
+    gap: 1rem;
+  }
+
+  nav ul.open {
+    display: flex; /* Show the navbar links when toggled */
+  }
+
+  nav a {
+    font-size: 1.2rem;
+    padding: 10px 15px; /* Adjust padding for better mobile navigation */
+  }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  .menu-toggle span {
+    width: 30px;
+    height: 3px;
+    background: #2e5c3c;
+    transition: all 0.3s ease;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+
+/* Prevent horizontal overflow */
+body {
+  overflow-x: hidden; /* Prevent the white horizontal bar on mobile */
+}
+
+/* =========================================================
+   FOOTER (Mobile Fixes)
+   ========================================================= */
+
+/* Footer layout for mobile */
+@media (max-width: 900px) {
+  footer .footer-line {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%; /* Ensure footer elements take up full width */
+  }
+
+  footer .footer-line .links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  footer .footer-line .socials {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%; /* Social icons will stretch across */
+    margin-top: 10px;
+  }
+
+  footer .footer-line .socials a img {
+    width: 25px; /* Resize social icons for mobile */
+  }
+
+  footer .copyright {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+}
