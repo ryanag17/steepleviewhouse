@@ -147,9 +147,10 @@
   </footer>
 
 <script type="text/javascript" src="https://cdn.emailjs.com/sdk/4.0.0/email.min.js"></script>
+
 <script type="text/javascript">
   // Initialize EmailJS with your public key
-  emailjs.init('2EXhqNDE8HLeIzFwr'); // Replace with your EmailJS public key
+  emailjs.init('2EXhqNDE8HLeIzFwr'); // Replace with your actual EmailJS public key
 
   function validateBookingForm(e) {
     e.preventDefault();
@@ -256,6 +257,7 @@
         time: new Date().toLocaleString()  // Submit current time
       };
 
+      // Send the email via EmailJS
       emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
         .then(function(response) {
           alert('Booking request sent successfully!');
