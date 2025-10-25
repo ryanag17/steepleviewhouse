@@ -6,6 +6,8 @@
   <title>Steepleview House | Book</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="script.js" defer></script>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/sdk/4.0.0/email.min.js"></script>
 </head>
 <body class="book-page">
 
@@ -42,7 +44,7 @@
       You can view availability of apartments & rooms in the calendars below this form.
     </p>
 
-    <form class="booking-form" action="mailto:booksteepleviewhouse@gmail.com" method="POST" enctype="text/plain" onsubmit="return validateBookingForm(event)" novalidate>
+    <form class="booking-form" onsubmit="return validateBookingForm(event)" novalidate>
       <div class="form-group">
         <label for="lastName">Last Name *</label>
         <input type="text" id="lastName" name="Last Name" required />
@@ -146,137 +148,139 @@
     </div>
   </footer>
 
-<script type="text/javascript" src="https://cdn.emailjs.com/sdk/4.0.0/email.min.js"></script>
+  <!-- EmailJS SDK Script -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/sdk/4.0.0/email.min.js"></script>
 
-<script type="text/javascript">
-  // Initialize EmailJS with your public key
-  emailjs.init('2EXhqNDE8HLeIzFwr'); // Replace with your actual EmailJS public key
+  <script type="text/javascript">
+    // Initialize EmailJS with your public key
+    emailjs.init('2EXhqNDE8HLeIzFwr'); // Replace with your actual EmailJS public key
 
-  function validateBookingForm(e) {
-    e.preventDefault();
-    const form = document.querySelector('.booking-form');
+    function validateBookingForm(e) {
+      e.preventDefault();
+      const form = document.querySelector('.booking-form');
 
-    // Clear old errors
-    form.querySelectorAll('.error-msg').forEach(el => el.remove());
-    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+      // Clear old errors
+      form.querySelectorAll('.error-msg').forEach(el => el.remove());
+      form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-    // Field references
-    const firstNameInput = document.getElementById('firstName');
-    const lastNameInput = document.getElementById('lastName');
-    const apartmentInput = document.getElementById('apartment');
-    const guestsInput = document.getElementById('guests');
-    const arrivalInput = document.getElementById('arrival');
-    const departureInput = document.getElementById('departure');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const addressInput = document.getElementById('address');
-    const messageInput = document.getElementById('message');
+      // Field references
+      const firstNameInput = document.getElementById('firstName');
+      const lastNameInput = document.getElementById('lastName');
+      const apartmentInput = document.getElementById('apartment');
+      const guestsInput = document.getElementById('guests');
+      const arrivalInput = document.getElementById('arrival');
+      const departureInput = document.getElementById('departure');
+      const emailInput = document.getElementById('email');
+      const phoneInput = document.getElementById('phone');
+      const addressInput = document.getElementById('address');
+      const messageInput = document.getElementById('message');
 
-    const arrival = new Date(arrivalInput.value);
-    const departure = new Date(departureInput.value);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+      const arrival = new Date(arrivalInput.value);
+      const departure = new Date(departureInput.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    let valid = true;
+      let valid = true;
 
-    // === VALIDATION ===
+      // === VALIDATION ===
 
-    // Check First Name
-    if (!firstNameInput.value.trim()) {
-      showError(firstNameInput, 'Please enter your first name.');
-      valid = false;
+      // Check First Name
+      if (!firstNameInput.value.trim()) {
+        showError(firstNameInput, 'Please enter your first name.');
+        valid = false;
+      }
+
+      // Check Last Name
+      if (!lastNameInput.value.trim()) {
+        showError(lastNameInput, 'Please enter your last name.');
+        valid = false;
+      }
+
+      // Check Apartment/Room
+      if (!apartmentInput.value.trim()) {
+        showError(apartmentInput, 'Please select an apartment or room.');
+        valid = false;
+      }
+
+      // Check Number of Guests
+      if (!guestsInput.value || isNaN(guestsInput.value) || guestsInput.value < 1 || guestsInput.value > 8) {
+        showError(guestsInput, 'Please enter a valid number of guests (1-8).');
+        valid = false;
+      }
+
+      // Check Arrival Date
+      if (!arrivalInput.value || arrival < today) {
+        showError(arrivalInput, 'Arrival date must be today or in the future.');
+        valid = false;
+      }
+
+      // Check Departure Date
+      if (!departureInput.value || departure <= arrival || departure < today) {
+        showError(departureInput, 'Departure date must be after the arrival date and today or in the future.');
+        valid = false;
+      }
+
+      // Check Email
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim() || !emailPattern.test(emailInput.value.trim())) {
+        showError(emailInput, 'Please enter a valid email address.');
+        valid = false;
+      }
+
+      // Check Phone Number
+      const phonePattern = /^\+?[0-9\s\-()]{7,20}$/;
+      if (!phoneInput.value.trim() || !phonePattern.test(phoneInput.value.trim())) {
+        showError(phoneInput, 'Please enter a valid phone number.');
+        valid = false;
+      }
+
+      // Check Address
+      if (!addressInput.value.trim() || addressInput.value.trim().length < 10) {
+        showError(addressInput, 'Please provide a more complete address.');
+        valid = false;
+      }
+
+      // === SEND EMAIL USING EMAILJS ===
+      if (valid) {
+        // Format the dates
+        const formattedArrival = arrival.toLocaleDateString('en-GB'); // Change locale if needed
+        const formattedDeparture = departure.toLocaleDateString('en-GB');
+
+        const templateParams = {
+          firstName: firstNameInput.value,
+          lastName: lastNameInput.value,
+          apartment: apartmentInput.value,
+          guests: guestsInput.value,
+          arrival: formattedArrival,  // Pass formatted date
+          departure: formattedDeparture,  // Pass formatted date
+          email: emailInput.value,
+          phone: phoneInput.value,
+          address: addressInput.value,
+          message: messageInput.value,
+          time: new Date().toLocaleString()  // Submit current time
+        };
+
+        // Send the email via EmailJS
+        emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
+          .then(function(response) {
+            alert('Booking request sent successfully!');
+            form.reset();  // Reset the form after successful submission
+          }, function(error) {
+            alert('Failed to send booking request. Please try again later.');
+            console.error('EmailJS Error:', error);
+          });
+      }
     }
 
-    // Check Last Name
-    if (!lastNameInput.value.trim()) {
-      showError(lastNameInput, 'Please enter your last name.');
-      valid = false;
+    // Function to show error messages
+    function showError(input, message) {
+      const error = document.createElement('div');
+      error.classList.add('error-msg');
+      error.textContent = message;
+      input.classList.add('input-error');
+      input.insertAdjacentElement('afterend', error);
     }
-
-    // Check Apartment/Room
-    if (!apartmentInput.value.trim()) {
-      showError(apartmentInput, 'Please select an apartment or room.');
-      valid = false;
-    }
-
-    // Check Number of Guests
-    if (!guestsInput.value || isNaN(guestsInput.value) || guestsInput.value < 1 || guestsInput.value > 8) {
-      showError(guestsInput, 'Please enter a valid number of guests (1-8).');
-      valid = false;
-    }
-
-    // Check Arrival Date
-    if (!arrivalInput.value || arrival < today) {
-      showError(arrivalInput, 'Arrival date must be today or in the future.');
-      valid = false;
-    }
-
-    // Check Departure Date
-    if (!departureInput.value || departure <= arrival || departure < today) {
-      showError(departureInput, 'Departure date must be after the arrival date and today or in the future.');
-      valid = false;
-    }
-
-    // Check Email
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailInput.value.trim() || !emailPattern.test(emailInput.value.trim())) {
-      showError(emailInput, 'Please enter a valid email address.');
-      valid = false;
-    }
-
-    // Check Phone Number
-    const phonePattern = /^\+?[0-9\s\-()]{7,20}$/;
-    if (!phoneInput.value.trim() || !phonePattern.test(phoneInput.value.trim())) {
-      showError(phoneInput, 'Please enter a valid phone number.');
-      valid = false;
-    }
-
-    // Check Address
-    if (!addressInput.value.trim() || addressInput.value.trim().length < 10) {
-      showError(addressInput, 'Please provide a more complete address.');
-      valid = false;
-    }
-
-    // === SEND EMAIL USING EMAILJS ===
-    if (valid) {
-      // Format the dates
-      const formattedArrival = arrival.toLocaleDateString('en-GB'); // Change locale if needed
-      const formattedDeparture = departure.toLocaleDateString('en-GB');
-
-      const templateParams = {
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value,
-        apartment: apartmentInput.value,
-        guests: guestsInput.value,
-        arrival: formattedArrival,  // Pass formatted date
-        departure: formattedDeparture,  // Pass formatted date
-        email: emailInput.value,
-        phone: phoneInput.value,
-        address: addressInput.value,
-        message: messageInput.value,
-        time: new Date().toLocaleString()  // Submit current time
-      };
-
-      // Send the email via EmailJS
-      emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
-        .then(function(response) {
-          alert('Booking request sent successfully!');
-          form.reset();  // Reset the form after successful submission
-        }, function(error) {
-          alert('Failed to send booking request. Please try again later.');
-          console.error('EmailJS Error:', error);
-        });
-    }
-  }
-
-  function showError(input, message) {
-    const error = document.createElement('div');
-    error.classList.add('error-msg');
-    error.textContent = message;
-    input.classList.add('input-error');
-    input.insertAdjacentElement('afterend', error);
-  }
-</script>
+  </script>
 
 </body>
 </html>
