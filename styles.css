@@ -1138,7 +1138,7 @@ footer .copyright {
     padding: 0;    /* Remove padding */
     box-shadow: none; /* Remove box-shadow */
     position: relative;
-    top: -10px; /* Move logo up slightly to center it vertically */
+    top: -25px; /* Move logo up slightly to center it vertically */
   }
 
   .navbar {
@@ -1234,7 +1234,7 @@ body {
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    margin-top: 20px; /* Increase space above social icons */
+    margin-top: 50px; /* Increase space above social icons */
     order: 2; /* Ensure they stay below the links */
   }
 
