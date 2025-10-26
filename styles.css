@@ -1305,7 +1305,7 @@ body {
   /* Links Section */
   footer .footer-line .links {
     display: flex;
-    gap: 2rem;
+    gap: 3rem; /* Increased gap between links */
     font-weight: bold;
     justify-content: center;
     margin-bottom: 20px; /* Space between links and socials */
@@ -1326,17 +1326,15 @@ body {
   footer .footer-line .socials {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem; /* Increased gap between social icons */
     width: 100%;
     margin-top: 20px; /* Space above social icons */
     flex-wrap: wrap; /* Allow wrapping of social icons */
   }
 
   footer .footer-line .socials a img {
-    width: 30px; /* Set a fixed width for the icons */
-    max-width: 30px; /* Ensure the width does not exceed this value */
-    max-height: 30px; /* Ensure the height does not exceed this value */
-    height: auto; /* Maintain aspect ratio */
+    width: 35px; /* Slightly larger icons */
+    height: 35px; /* Maintain aspect ratio */
     margin: 0 10px; /* Add spacing between icons */
   }
 
