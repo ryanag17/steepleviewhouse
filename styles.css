@@ -1292,70 +1292,48 @@ body {
 }
 
 /* =========================================================
-   FOOTER
+   FOOTER (Mobile Version - Below links, above copyright)
    ========================================================= */
-footer {
-  background-color: #2e5c3c;
-  color: white;
-  padding: 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
+@media (max-width: 900px) {
+  footer .footer-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 
-footer .footer-line {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 1rem;
-  flex-wrap: wrap; /* Ensure that elements wrap if necessary */
-}
+  footer .footer-line .links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 20px; /* Add space between links and socials */
+    padding: 0 1rem;
+  }
 
-footer .footer-line .links {
-  display: flex;
-  gap: 2rem;
-  font-weight: bold;
-  justify-content: center;
-  flex-grow: 1;
-  flex-wrap: wrap; /* Allow wrapping of links */
-}
+  footer .footer-line .socials {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 20px; /* Add space above social icons */
+    order: 2; /* Ensure social icons come after the links */
+    flex-wrap: wrap; /* Allow wrapping of social icons */
+  }
 
-footer .footer-line .links a {
-  color: white;
-  font-size: 1rem;
-  text-decoration: none;
-}
+  footer .footer-line .socials a img {
+    width: 30px;
+    margin: 0 10px;
+  }
 
-footer .footer-line .links a:hover {
-  color: #d4f0d4;
-}
+  footer .footer-line .socials a:hover img {
+    opacity: 0.8;
+  }
 
-/* Updated: Remove 'position: absolute;' and adjust the layout */
-footer .footer-line .socials {
-  display: flex;
-  gap: 14px;
-  justify-content: center; /* Center social icons */
-  margin-top: 1rem; /* Space above social icons */
-  width: 100%;
-  flex-wrap: wrap; /* Allow wrapping of social icons */
-}
-
-footer .footer-line .socials a img {
-  width: 30px;
-  margin: 0 10px;
-}
-
-footer .footer-line .socials a:hover img {
-  opacity: 0.8;
-}
-
-footer .copyright {
-  text-align: center;
-  font-size: 1rem;
-  margin-top: 1rem;
+  footer .copyright {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 20px; /* Add space between social icons and copyright */
+  }
 }
 
 /* POPUP STYLES */
