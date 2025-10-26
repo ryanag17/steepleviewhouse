@@ -1302,37 +1302,53 @@ body {
     width: 100%;
   }
 
+  /* Links Section */
   footer .footer-line .links {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 20px; /* Add space between links and socials */
+    gap: 2rem;
+    font-weight: bold;
+    justify-content: center;
+    margin-bottom: 20px; /* Space between links and socials */
     padding: 0 1rem;
   }
 
+  footer .footer-line .links a {
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  footer .footer-line .links a:hover {
+    color: #d4f0d4;
+  }
+
+  /* Social Media Section */
   footer .footer-line .socials {
     display: flex;
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    margin-top: 0px; /* Add space above social icons */
-    order: 3; /* Ensure social icons come after the links */
+    margin-top: 20px; /* Space above social icons */
     flex-wrap: wrap; /* Allow wrapping of social icons */
   }
 
   footer .footer-line .socials a img {
-    width: 30px;
-    margin: 0 10px;
+    width: 30px; /* Set a fixed width for the icons */
+    max-width: 30px; /* Ensure the width does not exceed this value */
+    max-height: 30px; /* Ensure the height does not exceed this value */
+    height: auto; /* Maintain aspect ratio */
+    margin: 0 10px; /* Add spacing between icons */
   }
 
   footer .footer-line .socials a:hover img {
     opacity: 0.8;
   }
 
+  /* Copyright Section */
   footer .copyright {
     text-align: center;
     font-size: 0.9rem;
-    margin-top: 20px; /* Add space between social icons and copyright */
+    margin-top: 20px; /* Space between social icons and copyright */
   }
 }
 
