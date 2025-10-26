@@ -19,7 +19,7 @@
           <span></span>
           <span></span>
         </div>
-        
+
         <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -111,6 +111,17 @@
       <p>&copy; 2025 Steepleview House. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    // Toggle the mobile menu
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('nav ul');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open'); // Toggle the 'open' class on the <ul> element
+      menuToggle.classList.toggle('active'); // Toggle the active class on the menu icon
+    });
+  </script>
 
 </body>
 </html>
