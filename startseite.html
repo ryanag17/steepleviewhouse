@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steepleview House | Startseite</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body class="homepage">
+
+<header>
+  <div class="navbar">
+    <a href="startseite.html" class="logo">
+      <img src="images/logo.png" alt="Steepleview House Logo" />
+    </a>
+    <nav>
+      <ul>
+        <li><a href="startseite.html" class="active">Startseite</a></li>
+        <li><a href="zimmer.html">Wohnungen</a></li>
+        <li><a href="reservieren.html">Reservieren</a></li>
+        <li><a href="umgebung.html">Umgebung</a></li>
+
+        <!-- Deutsch Dropdown -->
+        <li class="dropdown">
+          <a href="#" class="dropbtn">English <span>&#9662;</span></a>
+          <div class="dropdown-content">
+            <a href="index.html">Home</a>
+            <a href="rooms.html">Rooms</a>
+            <a href="book.html">Book</a>
+            <a href="surroundings.html">Surroundings</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Genießen Sie den Schwarzwald!</h1>
+      <a href="reservieren.html" class="btn">JETZT BUCHEN</a>
+    </div>
+    <div class="scroll-down">
+      <a href="#info">&#8595;</a>
+    </div>
+  </section>
+
+  <section id="info" class="info-section">
+    <div class="info-box">
+      <img src="images/rooms.jpg" alt="Zimmer" />
+      <h2>Zimmer</h2>
+      <hr />
+      <p>
+        Sehen Sie sich die Apartments und Zimmer an, die auf unserem Gelände zur Verfügung stehen, damit Sie sich entspannen können, während Sie den Schwarzwald und die umliegenden Gebiete erkunden. Sie können Fotos ansehen und detaillierte Beschreibungen jedes Apartments und Zimmers lesen, das wir anbieten.
+      </p>
+      <a href="zimmer.html" class="btn">Unsere Wohnungen ansehen</a>
+    </div>
+
+    <div class="info-box">
+      <img src="images/stay.jpeg" alt="Bleiben Sie bei uns" />
+      <h2>Bleiben Sie bei uns</h2>
+      <hr />
+      <p>
+        Willkommen im Steepleview House. Ob Sie zum Wandern, Radfahren, Skifahren oder einfach zum Entspannen und Genießen des schönen Schwarzwaldes kommen, das Steepleview House ist ein warmer und idyllischer Ort, den Sie während Ihrer Reisen Ihr Zuhause nennen können. Wählen Sie aus unseren gut ausgestatteten Apartments oder den neuen privaten Gästezimmern. Alle unsere Gäste haben Zugang zu einer Terrasse oder einem Balkon, unserem schönen Biergarten, kostenlosem WLAN, Wäsche- & BBQ-Einrichtungen, einem Innenbereich für Fahrräder oder Skier, überdachten Parkplätzen für Motorräder und Zugang zu einer EV-Ladestation vor Ort. Wir hoffen, Sie bald zu sehen!
+      </p>
+      <a href="reservieren.html" class="btn">Buchen Sie Ihren Aufenthalt</a>
+    </div>
+
+    <div class="info-box">
+      <img src="images/about.jpeg" alt="Aktivitäten" />
+      <h2>Aktivitäten</h2>
+      <hr />
+      <p>
+        Während Ihres Aufenthalts im Steepleview House gibt es viele Sehenswürdigkeiten und Unternehmungen. Ob Sie eine der Premium-Wanderungen gleich vor der Tür unternehmen oder einen Tagesausflug nach Straßburg, Freiburg oder Stuttgart machen, es gibt zahlreiche Aktivitäten, die Sie während Ihres Besuchs in Bad Peterstal-Griesbach unternehmen können. Sehen Sie sich unsere Karte mit einigen der empfohlenen Orte in der Umgebung an.
+      </p>
+      <a href="umgebung.html" class="btn">Umgebung</a>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery-grid">
+      <img src="images/gallery1.jpeg" alt="Galerie Bild 1" class="gallery-thumb" />
+      <img src="images/gallery2.jpeg" alt="Galerie Bild 2" class="gallery-thumb" />
+      <img src="images/gallery3.jpeg" alt="Galerie Bild 3" class="gallery-thumb" />
+    </div>
+  </section>
+
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-img" src="" alt="Galerie Ansicht" />
+    <div class="lightbox-nav">
+      <button id="prev">&#10094;</button>
+      <button id="next">&#10095;</button>
+    </div>
+  </div>
+
+  <section class="contact-section">
+    <h2>Kontaktieren Sie uns</h2>
+    <p class="contact-desc">
+      Bereit, mit uns zu buchen? Haben Sie Fragen zu unseren Zimmern? Wir helfen Ihnen gerne weiter!
+    </p>
+    <a href="https://wa.me/491704864851" target="_blank" class="btn whatsapp-btn">
+      Nachricht an uns senden
+    </a>
+
+    <div class="contact-details">
+      <h3>Steepleview House</h3>
+      <p>Waltersweg 5<br>77740 Bad Peterstal-Griesbach, Deutschland</p>
+      <p><a href="mailto:booksteepleviewhouse@gmail.com">booksteepleviewhouse@gmail.com</a></p>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d404.91935480425934!2d8.233377825150786!3d48.448548668920594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47972d026ed2b423%3A0xc0a09ef6a9e904fe!2sSteepleview%20House%20-%20Vacation%20Apartments%20%26%20Guestrooms!5e0!3m2!1sen!2sde!4v1753026234175!5m2!1sen!2sde&z=14" 
+      width="100%" 
+      height="350" 
+      style="border:0;" 
+      allowfullscreen="" 
+      loading="lazy" 
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery-grid">
+      <img src="images/gallery4.jpeg" alt="Galerie Bild 4" class="gallery-thumb" />
+      <img src="images/gallery5.jpeg" alt="Galerie Bild 5" class="gallery-thumb" />
+      <img src="images/gallery6.jpeg" alt="Galerie Bild 6" class="gallery-thumb" />
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-line">
+      <div class="links">
+        <a href="ueber-uns.html">Über uns</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+          <img src="images/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/steepleview_house" target="_blank">
+          <img src="images/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2025 Steepleview House. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
