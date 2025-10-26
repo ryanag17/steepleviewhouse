@@ -1126,13 +1126,17 @@ footer .copyright {
 }
 
 /* =========================================================
-   RESPONSIVE NAVBAR (Mobile Fixes)
+   HEADER + NAVBAR (Mobile Fixes)
    ========================================================= */
+
+/* Logo adjustment (transparent background on mobile) */
 @media (max-width: 900px) {
-  /* Logo resizing for mobile */
   .logo img {
     height: 60px;  /* Resize the logo for mobile */
     width: auto;   /* Maintain aspect ratio */
+    background: transparent; /* Make the background transparent */
+    padding: 0;    /* Remove padding */
+    box-shadow: none; /* Remove box-shadow */
   }
 
   .navbar {
@@ -1142,8 +1146,9 @@ footer .copyright {
     gap: 1rem;
   }
 
+  /* Menu items dropdown - Initially hidden */
   nav ul {
-    display: none;  /* Initially hide the navbar links */
+    display: none;
     flex-direction: column;
     width: 100%;
     background-color: #fff;
@@ -1160,13 +1165,14 @@ footer .copyright {
     padding: 10px 15px; /* Adjust padding for better mobile navigation */
   }
 
-  /* Menu toggle button for mobile */
+  /* Mobile menu toggle button (hamburger) */
   .menu-toggle {
     display: flex;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
     z-index: 1001;
+    margin-top: 15px; /* Ensure the toggle button has some margin on top */
   }
 
   .menu-toggle span {
@@ -1176,7 +1182,7 @@ footer .copyright {
     transition: all 0.3s ease;
   }
 
-  /* Animation for the toggle menu */
+  /* Toggle animation for hamburger */
   .menu-toggle.active span:nth-child(1) {
     transform: rotate(45deg) translateY(8px);
   }
@@ -1219,6 +1225,7 @@ body {
     gap: 1rem;
     width: 100%; /* Social icons will stretch across */
     margin-top: 10px;
+    order: 2; /* Move social icons below the links */
   }
 
   footer .footer-line .socials a img {
@@ -1228,6 +1235,7 @@ body {
   footer .copyright {
     font-size: 0.9rem;
     text-align: center;
+    order: 3; /* Place the copyright at the bottom */
   }
 }
 
