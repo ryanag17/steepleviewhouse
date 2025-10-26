@@ -1132,7 +1132,7 @@ footer .copyright {
 /* Logo adjustment (transparent background on mobile) */
 @media (max-width: 900px) {
   .logo img {
-    height: 60px;  /* Resize the logo for mobile */
+    height: 75px;  /* Slightly larger logo for mobile */
     width: auto;   /* Maintain aspect ratio */
     background: transparent; /* Make the background transparent */
     padding: 0;    /* Remove padding */
@@ -1150,10 +1150,12 @@ footer .copyright {
   nav ul {
     display: none;
     flex-direction: column;
-    width: 100%;
+    width: auto;  /* Make dropdown menu smaller */
+    max-width: 250px; /* Set a max-width for the dropdown */
     background-color: #fff;
     padding: 2rem 1rem;
     gap: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow for better visibility */
   }
 
   nav ul.open {
@@ -1173,6 +1175,9 @@ footer .copyright {
     cursor: pointer;
     z-index: 1001;
     margin-top: 15px; /* Ensure the toggle button has some margin on top */
+    position: absolute;
+    top: 20px; /* Add padding from the top */
+    right: 20px; /* Add padding from the right edge */
   }
 
   .menu-toggle span {
@@ -1212,30 +1217,34 @@ body {
     width: 100%; /* Ensure footer elements take up full width */
   }
 
+  /* Links section */
   footer .footer-line .links {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    margin-bottom: 20px; /* Add space between links and socials */
   }
 
+  /* Social media icons (Facebook & Instagram) */
   footer .footer-line .socials {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    width: 100%; /* Social icons will stretch across */
+    width: 100%;
     margin-top: 10px;
-    order: 2; /* Move social icons below the links */
+    order: 2; /* Ensure they stay below the links */
   }
 
   footer .footer-line .socials a img {
-    width: 25px; /* Resize social icons for mobile */
+    width: 30px; /* Resize social media icons */
   }
 
+  /* Copyright section */
   footer .copyright {
     font-size: 0.9rem;
     text-align: center;
-    order: 3; /* Place the copyright at the bottom */
+    order: 3; /* Place copyright below social media */
   }
 }
 
