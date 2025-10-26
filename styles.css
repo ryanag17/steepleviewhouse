@@ -1137,6 +1137,8 @@ footer .copyright {
     background: transparent; /* Make the background transparent */
     padding: 0;    /* Remove padding */
     box-shadow: none; /* Remove box-shadow */
+    position: relative;
+    top: -10px; /* Move logo up slightly to center it vertically */
   }
 
   .navbar {
@@ -1232,7 +1234,7 @@ body {
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 20px; /* Increase space above social icons */
     order: 2; /* Ensure they stay below the links */
   }
 
