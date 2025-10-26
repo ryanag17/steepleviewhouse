@@ -1305,11 +1305,12 @@ body {
   /* Links Section */
   footer .footer-line .links {
     display: flex;
-    gap: 3rem; /* Increased gap between links */
+    gap: 2rem; /* Adjust the gap between links */
     font-weight: bold;
     justify-content: center;
     margin-bottom: 20px; /* Space between links and socials */
     padding: 0 1rem;
+    flex-wrap: wrap; /* Allow wrapping of links if necessary */
   }
 
   footer .footer-line .links a {
@@ -1330,6 +1331,7 @@ body {
     width: 100%;
     margin-top: 20px; /* Space above social icons */
     flex-wrap: wrap; /* Allow wrapping of social icons */
+    padding: 0 1rem; /* Added padding to avoid too close to the edges */
   }
 
   footer .footer-line .socials a img {
