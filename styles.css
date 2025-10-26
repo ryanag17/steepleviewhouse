@@ -1299,7 +1299,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
     width: 100%; /* Ensure footer elements take up full width */
   }
 
@@ -1322,6 +1321,7 @@ body {
     margin-top: 20px; /* Increase space above social icons */
     order: 2; /* Ensure they stay below the links */
     padding: 0 1rem; /* Prevent icons from sticking to edges */
+    justify-content: space-around; /* Ensure icons are spaced out */
   }
 
   footer .footer-line .socials a img {
@@ -1332,7 +1332,6 @@ body {
   footer .copyright {
     font-size: 0.9rem;
     text-align: center;
-    order: 3; /* Place copyright below social media */
     margin-top: 20px; /* Add space between social icons and copyright */
   }
 }
