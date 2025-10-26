@@ -1296,6 +1296,7 @@ body {
    ========================================================= */
 @media (max-width: 900px) {
   footer .footer-line {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
@@ -1309,6 +1310,7 @@ body {
     align-items: center;
     gap: 1rem;
     margin-bottom: 20px; /* Add space between links and socials */
+    padding: 0 1rem; /* Prevent links from sticking to edges */
   }
 
   /* Social media icons (Facebook & Instagram) */
@@ -1319,6 +1321,7 @@ body {
     width: 100%;
     margin-top: 20px; /* Increase space above social icons */
     order: 2; /* Ensure they stay below the links */
+    padding: 0 1rem; /* Prevent icons from sticking to edges */
   }
 
   footer .footer-line .socials a img {
@@ -1330,6 +1333,7 @@ body {
     font-size: 0.9rem;
     text-align: center;
     order: 3; /* Place copyright below social media */
+    margin-top: 20px; /* Add space between social icons and copyright */
   }
 }
 
