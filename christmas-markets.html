@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christmas Markets Near Steepleview House</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+    <style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding-top: 100px; /* same as surroundings.html so header doesn’t overlap */
+    }
+
+    main.container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2b4d2b;
+        margin-bottom: 1rem;
+    }
+
+    p.intro {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 1.5rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    /* 🎄 Filters - same style as surroundings.html */
+    .filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .filters input {
+        padding: 10px 14px;
+        font-size: 15px;
+        border: 2px solid #3a7a3a;
+        border-radius: 25px;
+        outline: none;
+        background: #fff;
+        transition: 0.2s;
+    }
+
+    .filters input:focus {
+        box-shadow: 0 0 5px rgba(58, 122, 58, 0.5);
+    }
+
+    .filters button {
+        padding: 10px 18px;
+        font-size: 15px;
+        border: 2px solid #3a7a3a;
+        border-radius: 25px;
+        background: #3a7a3a;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .filters button:hover {
+        background: #2e612e;
+    }
+
+    /* Map styling */
+    #map {
+        height: 600px;
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .leaflet-control-container {
+        z-index: 1 !important;
+    }
+
+    /* Table styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 3rem;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 0.75rem 1rem;
+    }
+
+    th {
+        background-color: #2e5c3c;
+        color: white;
+        cursor: pointer;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    tr:hover {
+        background-color: #e7f0eb;
+    }
+
+    td a {
+        color: #2e5c3c;
+        text-decoration: underline;
+    }
+
+    td a:hover {
+        color: #1f4029;
+    }
+
+    footer {
+        margin-top: 60px;
+        text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Steepleview House Logo" />
+      </a>
+      
+      <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">Rooms</a></li>
+          <li><a href="book.html">Book</a></li>
+          <li><a href="surroundings.html">Surroundings</a></li>
+
+          <li class="dropdown">
+            <a href="#" class="dropbtn">Deutsch <span>&#9662;</span></a>
+            <div class="dropdown-content">
+              <a href="startseite.html">Startseite</a>
+              <a href="zimmer.html">Zimmer</a>
+              <a href="reservieren.html">Reservieren</a>
+              <a href="umgebung.html">Umgebung</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container">
+    <h1>🎄 Christmas Markets Near Us</h1>
+    <p class="intro">
+      Discover the most charming Christmas markets around Steepleview House.  
+      Search by city, country, or pick a date to find which ones are open!
+    </p>
+
+    <div class="filters">
+      <input type="text" id="searchCity" placeholder="Search by City" />
+      <input type="text" id="searchCountry" placeholder="Search by Country" />
+      <input type="date" id="searchDate" title="Filter by Date" />
+      <button id="resetFilters">Reset Filters</button>
+    </div>
+
+    <div id="map"></div>
+
+    <table id="marketsTable">
+      <thead>
+        <tr>
+          <th data-column="name" data-order="asc">Name</th>
+          <th data-column="city" data-order="asc">City</th>
+          <th data-column="country" data-order="asc">Country</th>
+          <th data-column="openingDate" data-order="asc">Opening Date</th>
+          <th data-column="closingDate" data-order="asc">Closing Date</th>
+          <th>Website</th>
+        </tr>
+      </thead>
+      <tbody id="marketsBody"></tbody>
+    </table>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-line">
+      <div class="links">
+        <a href="about-us.html">About Us</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+          <img src="images/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/steepleview_house" target="_blank">
+          <img src="images/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 Steepleview House. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const ourBusiness = {
+      name: "Steepleview House",
+      coords: [48.448545979797416, 8.233313789811467],
+      address: "Waltersweg 5, Bad Peterstal-Griesbach, Germany",
+      description: "Your welcoming stay in the heart of the Black Forest"
+    };
+
+    const markets = [
+      {
+        name: "Oberkirch Christmas Market",
+        city: "Oberkirch",
+        country: "Germany",
+        coords: [48.531433563706045, 8.078883367340904],
+        openingDate: "2025-12-12",
+        closingDate: "2025-12-14",
+        website: "https://oberkirch.ortenaukultur.de/de/veranstaltungen-2/detail/veranstaltung/id/566185-weihnachtsmarkt-in-oberkirch/?vt=1"
+      },
+      {
+        name: "Durbacher Winery Christmas Market",
+        city: "Durbach",
+        country: "Germany",
+        coords: [48.49288067651627, 8.023256652530424],
+        openingDate: "2025-11-29",
+        closingDate: "2025-11-30",
+        website: "https://www.durbach.de/veranstaltung/weihnachts-und-adventsmarkt-der-durbacher-winzer-5f55f29f1c"
+      },
+      {
+        name: "Offenburg Christmas Market",
+        city: "Offenburg",
+        country: "Germany",
+        coords: [48.47009473959924, 7.942100377693387],
+        openingDate: "2025-11-20",
+        closingDate: "2025-12-23",
+        website: "https://www.offenburg.de/de/zu-gast-in-offenburg/touristinfo/stadtfuehrungen/termine/detail/kultur/veranstaltung/id/582346-offenburger-weihnachtsmarkt/?vt=1&anc=a582346"
+      },
+      {
+        name: "Gengenbach Advent Market",
+        city: "Gengenbach",
+        country: "Germany",
+        coords: [48.40403127500208, 8.015319851219575],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-23",
+        website: "https://www.gengenbach.info/gengenbach-entdecken/adventskalender-1"
+      },
+      {
+        name: "Kehl Christmas Market",
+        city: "Kehl",
+        country: "Germany",
+        coords: [48.573396240119315, 7.811269774630204],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-07",
+        website: "https://marketing.kehl.de/vibrant+town/aktionen+_+highlights/weihnachtsmarkt"
+      },
+      {
+        name: "Achern Christmas Market",
+        city: "Achern",
+        country: "Germany",
+        coords: [48.62854504211014, 8.07166813159461],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-20",
+        website: "https://www.achern.de/de/Freizeit-Tourismus/Kultur-Veranstaltungen/Veranstaltungskalender/Veranstaltung?view=publish&item=eventDate&id=9543"
+      },
+      {
+        name: "Saint Nicholas Market Zell am Harmersbach",
+        city: "Zell am Harmersbach",
+        country: "Germany",
+        coords: [48.3463686050926, 8.063994231662642],
+        openingDate: "2025-12-06",
+        closingDate: "2025-12-06",
+        website: "https://www.zell.de/start/tourismus/nikolausmarkt.html"
+      },
+      {
+        name: "Hausach Christmas Market",
+        city: "Hausach",
+        country: "Germany",
+        coords: [48.283797446132105, 8.171875346465145],
+        openingDate: "2025-12-06",
+        closingDate: "2025-12-07",
+        website: "https://www.forum-hausach.de/hausacher-weihnachtsmarkt"
+      },
+      {
+        name: "Hornberg Christmas Market",
+        city: "Hornberg",
+        country: "Germany",
+        coords: [48.21371405141105, 8.2295728655711],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-06",
+        website: "https://www.hornberg.de/de/Winterwunderland-und-Lichterzauber/Hornberger-Lichterzauber"
+      },
+      {
+        name: "Winter Magic at Europa-Park",
+        city: "Rust",
+        country: "Germany",
+        coords: [48.26603426592431, 7.722011310330758],
+        openingDate: "2025-11-29",
+        closingDate: "2026-01-18",
+        website: "https://www.europapark.de/de/freizeitpark/infos/planen-sie-ihren-besuch/winterzauber-im-europa-park"
+      },
+      {
+        name: "Kenzingen Christmas Market",
+        city: "Kenzingen",
+        country: "Germany",
+        coords: [48.19137334152785, 7.769805676219683],
+        openingDate: "2025-11-29",
+        closingDate: "2025-11-30",
+        website: "https://www.kenzingen.de/gaeste/maerkte/weihnachtsmarkt-id_2362/"
+      },
+      {
+        name: "Endinger Christmas Market",
+        city: "Endingen am Kaiserstuhl",
+        country: "Germany",
+        coords: [48.14115040608755, 7.703158071209103],
+        openingDate: "2025-12-13",
+        closingDate: "2025-12-14",
+        website: "https://www.endingen.de/tourismus-freizeit/veranstaltungen/veranstaltungskalender/173/endinger-weihnachtsmarkt"
+      },
+      {
+        name: "Teningen Christmas Market",
+        city: "Teningen",
+        country: "Germany",
+        coords: [48.1279794344593, 7.808762572403996],
+        openingDate: "2025-12-13",
+        closingDate: "2025-12-14",
+        website: "https://www.teningen.de/site/Teningen-2020/node/606319/zmdetail_2719680/Weihnachtsmarkt.html?zm.sid=zmspmqqufeq1&nodeID=2719680"
+      },
+      {
+        name: "Waldkirch Christmas Market & Singing Christmas Tree",
+        city: "Waldkirch",
+        country: "Germany",
+        coords: [48.09108391142951, 7.962511177683502],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-14",
+        website: "https://www.singender-weihnachtsbaum.de/"
+      },
+      {
+        name: "Freiburg Christmas Market",
+        city: "Freiburg im Breisgau",
+        country: "Germany",
+        coords: [47.9960341725478, 7.849397290298521],
+        openingDate: "2025-11-20",
+        closingDate: "2025-12-23",
+        website: "https://weihnachtsmarkt.freiburg.de/"
+      },
+      {
+        name: "Lörracher Christmas Market",
+        city: "Lörrach",
+        country: "Germany",
+        coords: [47.611653807754266, 7.659731632929983],
+        openingDate: "2025-12-04",
+        closingDate: "2025-12-14",
+        website: "https://www.loerrach.de/de/Loerrach-Erleben/Wirtschaft-Einkaufen/Maerkte/Maerkte/Weihnachtsmarkt"
+      },
+      {
+        name: "Ravenna Gorge Christmas Market (Ticketed; Fri-Sun Only)",
+        city: "Breitnau (Hinterzarten)",
+        country: "Germany",
+        coords: [47.91723870565531, 8.074135822429959],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-21",
+        website: "https://www.hochschwarzwald.de/weihnachtsmarkt-ravennaschlucht"
+      },
+      {
+        name: "Schramberg Christmas Market",
+        city: "Schramberg",
+        country: "Germany",
+        coords: [48.22577756626567, 8.38515383277234],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-07",
+        website: "https://www.schramberg.de/de/aktuelles/veranstaltungen/termine/weihnachtsmarkt-in-schramberg-9db6bd2.php"
+      },
+      {
+        name: "Schwenningen Advent Market",
+        city: "Schwenningen (Villingen-Schwenningen)",
+        country: "Germany",
+        coords: [48.063833250000684, 8.536555775657257],
+        openingDate: "2025-11-20",
+        closingDate: "2025-11-30",
+        website: "https://www.villingen-schwenningen.de/tourismus-erleben/vs-erleben/maerkte-und-messen/weihnachtsmomente/"
+      },
+      {
+        name: "Villingen Christmas Market",
+        city: "Villingen (Villingen-Schwenningen)",
+        country: "Germany",
+        coords: [48.06025141751908, 8.459085240197572],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-14",
+        website: "https://www.villingen-schwenningen.de/tourismus-erleben/vs-erleben/maerkte-und-messen/weihnachtsmomente/"
+      },
+      {
+        name: "Rottweil Christmas Market",
+        city: "Rottweil",
+        country: "Germany",
+        coords: [48.167549483821055, 8.625374160334502],
+        openingDate: "2025-12-04",
+        closingDate: "2025-12-14",
+        website: "https://www.tourismus-rottweil.de/das-erlebnis/veranstaltungen/weihnachtsmarkt"
+      },
+      {
+        name: "Singen Christmas Market",
+        city: "Singen",
+        country: "Germany",
+        coords: [47.7610750210206, 8.83363746800889],
+        openingDate: "2025-12-04",
+        closingDate: "2025-12-23",
+        website: "https://weihnachtsmarkt-singen.de/"
+      },
+      {
+        name: "Radolfzeller Christmas Market",
+        city: "Radolfzell",
+        country: "Germany",
+        coords: [47.737330920813385, 8.970130073224263],
+        openingDate: "2025-12-04",
+        closingDate: "2025-12-07",
+        website: "https://www.radolfzell-tourismus.de/de/radolfzeller-christkindlemarkt"
+      },
+      {
+        name: "Konstanz - Christmas Market at Sea",
+        city: "Konstanz",
+        country: "Germany",
+        coords: [47.66134254493182, 9.178568492503189],
+        openingDate: "2025-11-27",
+        closingDate: "2025-12-23",
+        website: "https://weihnachtsmarkt-am-see.de/"
+      },
+      {
+        name: "Balinger Christmas Market",
+        city: "Balingen",
+        country: "Germany",
+        coords: [48.273134950021486, 8.851046648362251],
+        openingDate: "2025-11-29",
+        closingDate: "2025-11-30",
+        website: "https://www.balingen.de/site/Balingen-2020/node/18707699/zmdetail_523246478576/BalingerChristkindlesmarkt2025.html?zm.sid=zmgtf728gct1&nodeID=523246478576"
+      },
+      {
+        name: "Hohenzollern Castle Royal Winter Magic",
+        city: "Burg Hohenzollern",
+        country: "Germany",
+        coords: [48.3235460763871, 8.967401185180517],
+        openingDate: "2025-11-21",
+        closingDate: "2026-01-06",
+        website: "https://burg-hohenzollern.com/de/veranstaltungen/koeniglicher-winterzauber"
+      },
+      {
+        name: "Tübingen Christmas Market",
+        city: "Tübingen",
+        country: "Germany",
+        coords: [48.520278178617424, 9.053520990654707],
+        openingDate: "2025-12-12",
+        closingDate: "2025-12-14",
+        website: "https://www.visit-bw.com/de/veranstaltung/tubinger-weihnachtsmarkt/a899dcb2-3298-11ee-954f-3580be536dd5"
+      },
+      {
+        name: "Reutlinger Christmas Market",
+        city: "Reutlingen",
+        country: "Germany",
+        coords: [48.4902250981862, 9.21621099315572],
+        openingDate: "2025-11-26",
+        closingDate: "2025-12-22",
+        website: "https://weihnachtsmarkt-reutlingen.de/"
+      },
+      {
+        name: "Metzingen Christmas Market",
+        city: "Metzingen",
+        country: "Germany",
+        coords: [48.540834018171424, 9.28664891967588],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-07",
+        website: "https://www.metzingen.de/weihnachtsmarkt"
+      },
+      {
+        name: "Esslingen Medieval & Christmas Market",
+        city: "Esslingen",
+        country: "Germany",
+        coords: [48.74281241429834, 9.307143342227718],
+        openingDate: "2025-11-25",
+        closingDate: "2025-12-22",
+        website: "https://www.esslingen-info.com/veranstaltungen/mittelaltermarkt-weihnachtsmarkt"
+      },
+      {
+        name: "Stuttgart Christmas Market",
+        city: "Stuttgart",
+        country: "Germany",
+        coords: [48.77879852411686, 9.179133135836558],
+        openingDate: "2025-11-26",
+        closingDate: "2025-12-23",
+        website: "https://www.stuttgarter-weihnachtsmarkt.de/de/home/"
+      },
+      {
+        name: "Pforzheim Christmas Market",
+        city: "Pforzheim",
+        country: "Germany",
+        coords: [48.89106784160371, 8.702291123040698],
+        openingDate: "2025-11-24",
+        closingDate: "2025-12-22",
+        website: "https://www.visit-bw.com/en/event/pforzheim-golden-christmas-market/b591d938-01a2-4753-8d1c-b0f3e851f8e5#/"
+      },
+      {
+        name: "Heidelberg Christmas Market",
+        city: "Heidelberg",
+        country: "Germany",
+        coords: [49.40933369950775, 8.693448716817528],
+        openingDate: "2025-11-24",
+        closingDate: "2025-12-22",
+        website: "https://www.heidelberg-marketing.de/event/heidelberger-weihnachtsmarkt"
+      },
+      {
+        name: "Kalrsruhe Christmas Market",
+        city: "Karlsruhe",
+        country: "Germany",
+        coords: [49.00902666206611, 8.403860210808014],
+        openingDate: "2025-11-24",
+        closingDate: "2025-12-23",
+        website: "https://www.karlsruhe-erleben.de/weihnachtsstadt/christkindlesmarkt"
+      },
+      {
+        name: "Rastatt Christmas Market",
+        city: "Rastatt",
+        country: "Germany",
+        coords: [48.85768411571185, 8.202500637699334],
+        openingDate: "2025-11-20",
+        closingDate: "2025-12-23",
+        website: "https://www.rastatt.de/kultur-und-freizeit/freizeit-und-einkaufen/maerkte-und-events/weihnachtsmarkt-info"
+      },
+      {
+        name: "Baden-Baden Christmas Market",
+        city: "Baden-Baden",
+        country: "Germany",
+        coords: [48.76030097242191, 8.237069395144657],
+        openingDate: "2025-11-27",
+        closingDate: "2026-01-06",
+        website: "https://www.baden-baden.com/veranstaltungen/christkindelsmarkt"
+      },
+      {
+        name: "Bühler Advent Market",
+        city: "Bühl",
+        country: "Germany",
+        coords: [48.6957114874276, 8.135324798622156],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-20",
+        website: "https://www.buehl.de/adventsmarkt"
+      },
+      {
+        name: "Basel Christmas Market",
+        city: "Basel",
+        country: "Switzerland",
+        coords: [47.556410105771604, 7.591612634452581],
+        openingDate: "2025-11-27",
+        closingDate: "2025-12-23",
+        website: "https://www.basel.com/de/veranstaltungen/weihnachten/weihnachtsmarkt"
+      },
+      {
+        name: "Strasbourg Christmas Market",
+        city: "Strasbourg",
+        country: "France",
+        coords: [48.58349336133987, 7.746598606664804],
+        openingDate: "2025-11-26",
+        closingDate: "2025-12-24",
+        website: "https://noel.strasbourg.eu/en/"
+      },
+      {
+        name: "Obernai Christmas Market",
+        city: "Obernai",
+        country: "France",
+        coords: [48.4621756806721, 7.482447254842729],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-31",
+        website: "https://www.tourisme-obernai.fr/En/Things-to-see-and-do/Programme-of-events/Christmas-in-Obernai.html"
+      },
+      {
+        name: "Ribeauvillé Medieval Christmas Market (Sat-Sun Only)",
+        city: "Ribeauvillé",
+        country: "France",
+        coords: [48.19456125138367, 7.32047487474947],
+        openingDate: "2025-12-06",
+        closingDate: "2025-12-14",
+        website: "https://www.ribeauville-riquewihr.com/LEI/Ribeauville's-Medieval-Christmas-market.htm?HTMLPage=/en/entertainment/christmas-events.htm&action=&page=2&commune=&categorie=1900076s1900202&genre=1900009&nom_recherche=&ID=229003338&GENRE=1900009&CATEGORIE=1900076&langue=2&sessionalea="
+      },
+      {
+        name: "Riquewihr Christmas Market",
+        city: "Riquewihr",
+        country: "France",
+        coords: [48.166507271165294, 7.298876790416883],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-21",
+        website: "https://www.ribeauville-riquewihr.com/LEI/Traditional-Christmas-market.htm?HTMLPage=/en/entertainment/christmas-events.htm&action=&page=1&commune=&categorie=1900068&genre=0&nom_recherche=&ID=229002783&GENRE=0&CATEGORIE=1900068&langue=2&sessionalea="
+      },
+      {
+        name: "Kaysersberg-Vignoble Christmas Market (Fri-Sun Only)",
+        city: "Kaysersberg Vignoble",
+        country: "France",
+        coords: [48.1387729112244, 7.2641993142962],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-21",
+        website: "https://www.tourisme-obernai.fr/En/Things-to-see-and-do/Programme-of-events/Christmas-in-Obernai.html"
+      },
+      {
+        name: "Turckheim Christmas Market",
+        city: "Turckheim",
+        country: "France",
+        coords: [47.556410105771604, 7.591612634452581],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-30",
+        website: "https://www.noel-colmar.com/en/turckheim"
+      },
+      {
+        name: "Eguisheim Christmas Market",
+        city: "Eguisheim",
+        country: "France",
+        coords: [48.04326, 7.30652],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-30",
+        website: "https://www.noel-colmar.com/en/eguisheim"
+      },
+      {
+        name: "Colmar Christmas Market",
+        city: "Colmar",
+        country: "France",
+        coords: [48.074130377461515, 7.356837316335672],
+        openingDate: "2025-11-25",
+        closingDate: "2025-12-29",
+        website: "https://www.noel-colmar.com/en/colmar-the-magic-of-christmas/presentation/colmar-the-magic-of-christmas"
+      },
+      {
+        name: "Freudenstadt Christmas Market",
+        city: "Freudenstadt",
+        country: "Germany",
+        coords: [48.46446804000277, 8.411832797969575],
+        openingDate: "2025-12-04",
+        closingDate: "2025-12-14",
+        website: "https://www.freudenstadt.de/Weihnachtsmarkt2025"
+      },
+      {
+        name: "Calw Christmas Market",
+        city: "Calw",
+        country: "Germany",
+        coords: [48.71426335614893, 8.739033107012476],
+        openingDate: "2025-11-27",
+        closingDate: "2025-11-30",
+        website: "https://www.calw.de/event/weihnachtsmarkt-maerchenhaftes-calw-1615ad9691"
+      },
+      {
+        name: "Nagold Christmas Market",
+        city: "Nagold",
+        country: "Germany",
+        coords: [48.55083114239108, 8.724044521370859],
+        openingDate: "2025-12-05",
+        closingDate: "2025-12-07",
+        website: "https://www.nagold.de/Weihnachtsmarkt"
+      }
+    ];
+
+    // Major “headline” markets that always appear first
+    const majorMarkets = [
+    "Strasbourg Christmas Market",
+    "Colmar Christmas Market",
+    "Freiburg Christmas Market",
+    "Stuttgart Christmas Market",
+    "Baden-Baden Christmas Market",
+    "Heidelberg Christmas Market",
+    "Karlsruhe Christmas Market",
+    "Esslingen Medieval & Christmas Market",
+    "Basel Christmas Market",
+    "Winter Magic at Europa-Park"
+    ];
+
+    // --- Helper: Haversine distance (km) ---
+    function distanceKm([lat1, lon1], [lat2, lon2]) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // --- Sort markets ---
+    const sortedMarkets = [...markets].sort((a, b) => {
+    const aIsMajor = majorMarkets.includes(a.name);
+    const bIsMajor = majorMarkets.includes(b.name);
+
+    // 1️⃣ Major markets come first
+    if (aIsMajor && !bIsMajor) return -1;
+    if (bIsMajor && !aIsMajor) return 1;
+
+    // 2️⃣ Otherwise sort by distance
+    const distA = distanceKm(ourBusiness.coords, a.coords);
+    const distB = distanceKm(ourBusiness.coords, b.coords);
+    return distA - distB;
+    });
+
+    // --- Everything below remains as in your file ---
+    function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    return `${mm}-${dd}-${yyyy}`;
+    }
+
+    // Initialize map
+    const map = L.map("map").setView(ourBusiness.coords, 9);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let markers = [];
+
+    function renderMarkers(data) {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    // House marker
+    const houseMarker = L.marker(ourBusiness.coords, {
+        icon: L.icon({
+        iconUrl: "images/star.svg",
+        iconSize: [28, 28]
+        })
+    }).addTo(map).bindPopup(`<strong>${ourBusiness.name}</strong><br>${ourBusiness.address}`);
+    markers.push(houseMarker);
+
+    // Red markers for markets
+    data.forEach(m => {
+        const popupContent = `
+        <strong>${m.name}</strong><br>
+        ${m.city}, ${m.country}<br>
+        Open from ${formatDate(m.openingDate)} to ${formatDate(m.closingDate)}<br>
+        <a href="${m.website}" target="_blank" rel="noopener">Website</a>
+        `;
+        const marker = L.marker(m.coords, {
+        icon: L.icon({
+            iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            iconSize: [28, 28]
+        })
+        }).addTo(map).bindPopup(popupContent);
+        markers.push(marker);
+    });
+    }
+
+    const tbody = document.getElementById("marketsBody");
+    function renderTable(data) {
+    tbody.innerHTML = "";
+    data.forEach(m => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${m.name}</td>
+        <td>${m.city}</td>
+        <td>${m.country}</td>
+        <td>${formatDate(m.openingDate)}</td>
+        <td>${formatDate(m.closingDate)}</td>
+        <td><a href="${m.website}" target="_blank" rel="noopener">Website</a></td>
+        `;
+        row.addEventListener("click", () => map.setView(m.coords, 13));
+        tbody.appendChild(row);
+    });
+    }
+
+    // Use sortedMarkets for default display
+    renderTable(sortedMarkets);
+    renderMarkers(sortedMarkets);
+
+    // --- Sorting & filtering logic (unchanged) ---
+    document.querySelectorAll("th[data-column]").forEach(th => {
+    th.addEventListener("click", () => {
+        const column = th.getAttribute("data-column");
+        const order = th.getAttribute("data-order");
+        const sorted = [...sortedMarkets].sort((a, b) => {
+        if (a[column] < b[column]) return order === "asc" ? -1 : 1;
+        if (a[column] > b[column]) return order === "asc" ? 1 : -1;
+        return 0;
+        });
+        th.setAttribute("data-order", order === "asc" ? "desc" : "asc");
+        renderTable(sorted);
+        renderMarkers(sorted);
+    });
+    });
+
+    const cityInput = document.getElementById("searchCity");
+    const countryInput = document.getElementById("searchCountry");
+    const dateInput = document.getElementById("searchDate");
+    const resetBtn = document.getElementById("resetFilters");
+
+    function filterMarkets() {
+    const cityVal = cityInput.value.toLowerCase();
+    const countryVal = countryInput.value.toLowerCase();
+    const dateVal = dateInput.value ? new Date(dateInput.value) : null;
+
+    const filtered = sortedMarkets.filter(m => {
+        const matchCity = m.city.toLowerCase().includes(cityVal);
+        const matchCountry = m.country.toLowerCase().includes(countryVal);
+        let matchDate = true;
+        if (dateVal) {
+        const open = new Date(m.openingDate);
+        const close = new Date(m.closingDate);
+        matchDate = dateVal >= open && dateVal <= close;
+        }
+        return matchCity && matchCountry && matchDate;
+    });
+
+    renderTable(filtered);
+    renderMarkers(filtered);
+    }
+
+    cityInput.addEventListener("input", filterMarkets);
+    countryInput.addEventListener("input", filterMarkets);
+    dateInput.addEventListener("change", filterMarkets);
+    resetBtn.addEventListener("click", () => {
+    cityInput.value = "";
+    countryInput.value = "";
+    dateInput.value = "";
+    renderTable(sortedMarkets);
+    renderMarkers(sortedMarkets);
+    });
+  </script>
+</body>
+</html>

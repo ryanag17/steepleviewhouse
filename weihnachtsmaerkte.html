@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weihnachtsmärkte in der Nähe von Steepleview House</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding-top: 100px; /* damit Header nicht überlappt */
+    }
+
+    main.container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2b4d2b;
+        margin-bottom: 1rem;
+    }
+
+    p.intro {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 1.5rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    /* Filterbereich */
+    .filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .filters input {
+        padding: 10px 14px;
+        font-size: 15px;
+        border: 2px solid #3a7a3a;
+        border-radius: 25px;
+        outline: none;
+        background: #fff;
+        transition: 0.2s;
+    }
+
+    .filters input:focus {
+        box-shadow: 0 0 5px rgba(58, 122, 58, 0.5);
+    }
+
+    .filters button {
+        padding: 10px 18px;
+        font-size: 15px;
+        border: 2px solid #3a7a3a;
+        border-radius: 25px;
+        background: #3a7a3a;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .filters button:hover {
+        background: #2e612e;
+    }
+
+    /* Karte */
+    #map {
+        height: 600px;
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .leaflet-control-container {
+        z-index: 1 !important;
+    }
+
+    /* Tabelle */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 3rem;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 0.75rem 1rem;
+    }
+
+    th {
+        background-color: #2e5c3c;
+        color: white;
+        cursor: pointer;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    tr:hover {
+        background-color: #e7f0eb;
+    }
+
+    td a {
+        color: #2e5c3c;
+        text-decoration: underline;
+    }
+
+    td a:hover {
+        color: #1f4029;
+    }
+
+    footer {
+        margin-top: 60px;
+        text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+    <header>
+    <div class="navbar">
+        <a href="startseite.html" class="logo">
+        <img src="images/logo.png" alt="Steepleview House Logo" />
+        </a>
+        
+        <div class="menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        
+        <nav>
+        <ul>
+            <li><a href="startseite.html">Startseite</a></li>
+            <li><a href="zimmer.html">Wohnungen</a></li>
+            <li><a href="reservieren.html">Reservieren</a></li>
+            <li><a href="umgebung.html">Umgebung</a></li>
+
+            <!-- English Dropdown -->
+            <li class="dropdown">
+            <a href="#" class="dropbtn">English <span>&#9662;</span></a>
+            <div class="dropdown-content">
+                <a href="index.html">Home</a>
+                <a href="rooms.html">Rooms</a>
+                <a href="book.html">Book</a>
+                <a href="surroundings.html">Surroundings</a>
+            </div>
+            </li>
+        </ul>
+        </nav>
+    </div>
+    </header>
+
+  <!-- MAIN -->
+  <main class="container">
+    <h1>🎄 Weihnachtsmärkte in der Nähe</h1>
+    <p class="intro">
+      Entdecken Sie die charmantesten Weihnachtsmärkte rund um das Steepleview House.  
+      Suchen Sie nach Stadt, Land oder wählen Sie ein Datum, um zu sehen, welche Märkte geöffnet sind!
+    </p>
+
+    <div class="filters">
+      <input type="text" id="searchCity" placeholder="Nach Stadt suchen" />
+      <input type="text" id="searchCountry" placeholder="Nach Land suchen" />
+      <input type="date" id="searchDate" title="Nach Datum filtern" />
+      <button id="resetFilters">Filter zurücksetzen</button>
+    </div>
+
+    <div id="map"></div>
+
+    <table id="marketsTable">
+      <thead>
+        <tr>
+          <th data-column="name" data-order="asc">Name</th>
+          <th data-column="city" data-order="asc">Stadt</th>
+          <th data-column="country" data-order="asc">Land</th>
+          <th data-column="openingDate" data-order="asc">Öffnungsdatum</th>
+          <th data-column="closingDate" data-order="asc">Schlussdatum</th>
+          <th>Webseite</th>
+        </tr>
+      </thead>
+      <tbody id="marketsBody"></tbody>
+    </table>
+  </main>
+
+  <footer>
+    <div class="footer-line">
+      <div class="links">
+        <a href="ueber-uns.html">Über uns</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/steepleviewhouse" target="_blank">
+          <img src="images/facebook.png" alt="Facebook" />
+        </a>
+        <a href="https://www.instagram.com/steepleview_house" target="_blank">
+          <img src="images/instagram.png" alt="Instagram" />
+        </a>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2025 Steepleview House. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    const ourBusiness = {
+      name: "Steepleview House",
+      coords: [48.448545979797416, 8.233313789811467],
+      address: "Waltersweg 5, Bad Peterstal-Griesbach, Deutschland",
+      description: "Ihr einladender Aufenthalt im Herzen des Schwarzwaldes"
+    };
+
+    const markets = [
+      {
+        name: "Stuttgarter Weihnachtsmarkt",
+        city: "Stuttgart",
+        country: "Deutschland",
+        coords: [48.7784, 9.1806],
+        openingDate: "2025-11-27",
+        closingDate: "2025-12-23",
+        website: "https://www.stuttgarter-weihnachtsmarkt.de/"
+      },
+      {
+        name: "Gengenbacher Weihnachtsmarkt",
+        city: "Gengenbach",
+        country: "Deutschland",
+        coords: [48.4039, 8.0181],
+        openingDate: "2025-11-30",
+        closingDate: "2025-12-23",
+        website: "https://www.stadt-gengenbach.de/"
+      },
+      {
+        name: "Baden-Badener Weihnachtsmarkt",
+        city: "Baden-Baden",
+        country: "Deutschland",
+        coords: [48.7586, 8.2398],
+        openingDate: "2025-11-28",
+        closingDate: "2025-12-30",
+        website: "https://www.baden-baden.com/"
+      }
+    ];
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      const dd = String(d.getDate()).padStart(2, "0");
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      return `${dd}.${mm}.${yyyy}`;
+    }
+
+    // Karte initialisieren
+    const map = L.map("map").setView(ourBusiness.coords, 9);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let markers = [];
+
+    function renderMarkers(data) {
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      // Haus-Marker mit star.svg
+      const houseMarker = L.marker(ourBusiness.coords, {
+        icon: L.icon({
+          iconUrl: "images/star.svg",
+          iconSize: [28, 28]
+        })
+      }).addTo(map).bindPopup(`<strong>${ourBusiness.name}</strong><br>${ourBusiness.address}`);
+      markers.push(houseMarker);
+
+    // Red markers for markets with detailed popup
+    data.forEach(m => {
+    const popupContent = `
+        <strong>${m.name}</strong><br>
+        ${m.city}, ${m.country}<br>
+        Geöffnet von ${formatDate(m.openingDate)} bis ${formatDate(m.closingDate)}<br>
+        <a href="${m.website}" target="_blank" rel="noopener">Website</a>
+    `;
+    
+    const marker = L.marker(m.coords, {
+        icon: L.icon({
+        iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        iconSize: [28, 28]
+        })
+    }).addTo(map).bindPopup(popupContent);
+
+    markers.push(marker);
+    });
+    }
+
+    const tbody = document.getElementById("marketsBody");
+    function renderTable(data) {
+      tbody.innerHTML = "";
+      data.forEach(m => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${m.name}</td>
+          <td>${m.city}</td>
+          <td>${m.country}</td>
+          <td>${formatDate(m.openingDate)}</td>
+          <td>${formatDate(m.closingDate)}</td>
+          <td><a href="${m.website}" target="_blank" rel="noopener">Webseite</a></td>
+        `;
+        row.addEventListener("click", () => map.setView(m.coords, 13));
+        tbody.appendChild(row);
+      });
+    }
+
+    renderTable(markets);
+    renderMarkers(markets);
+
+    // Sortierung
+    document.querySelectorAll("th[data-column]").forEach(th => {
+      th.addEventListener("click", () => {
+        const column = th.getAttribute("data-column");
+        const order = th.getAttribute("data-order");
+        const sorted = [...markets].sort((a, b) => {
+          if (a[column] < b[column]) return order === "asc" ? -1 : 1;
+          if (a[column] > b[column]) return order === "asc" ? 1 : -1;
+          return 0;
+        });
+        th.setAttribute("data-order", order === "asc" ? "desc" : "asc");
+        renderTable(sorted);
+        renderMarkers(sorted);
+      });
+    });
+
+    // Filter
+    const cityInput = document.getElementById("searchCity");
+    const countryInput = document.getElementById("searchCountry");
+    const dateInput = document.getElementById("searchDate");
+    const resetBtn = document.getElementById("resetFilters");
+
+    function filterMarkets() {
+      const cityVal = cityInput.value.toLowerCase();
+      const countryVal = countryInput.value.toLowerCase();
+      const dateVal = dateInput.value ? new Date(dateInput.value) : null;
+
+      const filtered = markets.filter(m => {
+        const matchCity = m.city.toLowerCase().includes(cityVal);
+        const matchCountry = m.country.toLowerCase().includes(countryVal);
+        let matchDate = true;
+        if (dateVal) {
+          const open = new Date(m.openingDate);
+          const close = new Date(m.closingDate);
+          matchDate = dateVal >= open && dateVal <= close;
+        }
+        return matchCity && matchCountry && matchDate;
+      });
+
+      renderTable(filtered);
+      renderMarkers(filtered);
+    }
+
+    cityInput.addEventListener("input", filterMarkets);
+    countryInput.addEventListener("input", filterMarkets);
+    dateInput.addEventListener("change", filterMarkets);
+    resetBtn.addEventListener("click", () => {
+      cityInput.value = "";
+      countryInput.value = "";
+      dateInput.value = "";
+      renderTable(markets);
+      renderMarkers(markets);
+    });
+  </script>
+</body>
+</html>
