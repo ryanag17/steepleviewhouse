@@ -1565,23 +1565,28 @@ body {
   }
 }
 
+/* =========================================================
+   GALLERY-SAFE IMAGE PROTECTION
+   ========================================================= */
 .protected-image {
   position: relative;
-  display: inline-block;
+  width: 100%;      /* ensures it takes the same width as original img */
+  height: 100%;     /* follows .gallery-thumb height */
+  overflow: hidden; /* prevents overlay from breaking layout */
 }
 
 .protected-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; /* disable right-click, drag, open-new-tab */
   display: block;
-  pointer-events: none; /* Prevent dragging/open-in-new-tab */
 }
 
+/* invisible overlay to block right-click menu */
 .protected-image::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent; /* blocks right-click */
-  z-index: 2;
+  inset: 0;
+  z-index: 3;
 }
