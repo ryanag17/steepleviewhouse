@@ -1590,3 +1590,31 @@ body {
   inset: 0;
   z-index: 3;
 }
+
+/* =========================================================
+   PROTECTED IMAGES (GALLERY-SAFE VERSION)
+   ========================================================= */
+.gallery-grid .protected-image {
+  width: 100%;
+  height: 300px;              /* same height as gallery-thumb */
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 calc(33.333% - 10px); 
+  /* ensures EXACT same layout (3 per row) */
+}
+
+.gallery-grid .protected-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;       /* disables right-click/open-in-new-tab */
+  display: block;
+}
+
+/* invisible overlay blocking save-as / right-click */
+.gallery-grid .protected-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
