@@ -261,14 +261,25 @@
           });
         }
 
-        emailjs.send('service_9d4v51e', 'template_u419r99', templateParams)
-        .then(function(response) {
-            showSuccessPopup();
-            form.reset();
-        }, function(error) {
+        fetch("send-email.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(templateParams)
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              showSuccessPopup();
+              form.reset();
+            } else {
+              showErrorPopup();
+              console.error("Server error:", data.error);
+            }
+          })
+          .catch(err => {
             showErrorPopup();
-            console.error('EmailJS Error:', error);
-        });
+            console.error("Fetch error:", err);
+          });
       }
     }
 
