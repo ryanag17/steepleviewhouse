@@ -604,22 +604,26 @@ window.onload = function() {
 </script>
 
 <script>
-(function() {
+(function () {
   const select = document.getElementById("countryCode");
   let buffer = "";
   let timer;
 
-  select.addEventListener("keydown", function(e) {
+  function extractCountry(optionText) {
+    const parts = optionText.trim().split(" ");
+    return parts.slice(2).join(" ").toLowerCase();
+  }
+
+  select.addEventListener("keydown", function (e) {
     if (e.key.length !== 1) return;
 
     buffer += e.key.toLowerCase();
 
     clearTimeout(timer);
-    timer = setTimeout(() => buffer = "", 700);
+    timer = setTimeout(() => (buffer = ""), 700);
 
     for (let option of select.options) {
-      let text = option.textContent.toLowerCase();
-      let country = text.replace(/^[^\s]+\s+\+\S+\s+/,"").toLowerCase();
+      const country = extractCountry(option.textContent);
       if (country.startsWith(buffer)) {
         select.value = option.value;
         break;
