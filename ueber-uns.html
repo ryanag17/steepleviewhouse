@@ -27,7 +27,6 @@
             <li><a href="reservieren.html">Reservieren</a></li>
             <li><a href="umgebung.html">Umgebung</a></li>
 
-            <!-- English Dropdown -->
             <li class="dropdown">
             <a href="#" class="dropbtn">English <span>&#9662;</span></a>
             <div class="dropdown-content">
@@ -118,13 +117,12 @@
   </footer>
 
   <script>
-    // Toggle the mobile menu
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('nav ul');
 
     menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open'); // Toggle the 'open' class on the <ul> element
-      menuToggle.classList.toggle('active'); // Toggle the active class on the menu icon
+      navLinks.classList.toggle('open');
+      menuToggle.classList.toggle('active');
     });
   </script>
 

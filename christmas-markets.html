@@ -23,7 +23,7 @@
         font-family: 'Segoe UI', sans-serif;
         background: #f8f9fa;
         margin: 0;
-        padding-top: 100px; /* same as surroundings.html so header doesn’t overlap */
+        padding-top: 100px;
     }
 
     main.container {
@@ -46,7 +46,6 @@
         line-height: 1.6;
     }
 
-    /* 🎄 Filters - same style as surroundings.html */
     .filters {
         display: flex;
         justify-content: center;
@@ -146,14 +145,12 @@
 </head>
 
 <body>
-  <!-- HEADER -->
     <header>
     <div class="navbar">
         <a href="index.html" class="logo">
         <img src="images/christmas_logo.png" alt="Steepleview House Logo" />
         </a>
         
-        <!-- Mobile Menu Toggle Button -->
         <div class="menu-toggle">
         <span></span>
         <span></span>
@@ -167,7 +164,6 @@
             <li><a href="book.html">Book</a></li>
             <li><a href="surroundings.html">Surroundings</a></li>
 
-            <!-- Deutsch Dropdown -->
             <li class="dropdown">
             <a href="#" class="dropbtn">Deutsch <span>&#9662;</span></a>
             <div class="dropdown-content">
@@ -182,7 +178,6 @@
     </div>
     </header>
 
-  <!-- MAIN -->
   <main class="container">
     <h1>🎄 Christmas Markets Near Us</h1>
     <p class="intro">
@@ -216,7 +211,6 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-line">
       <div class="links">
@@ -237,7 +231,6 @@
     </div>
   </footer>
 
-  <!-- SCRIPT -->
   <script>
     const ourBusiness = {
       name: "Steepleview House",
@@ -690,7 +683,6 @@
       }
     ];
 
-    // Major “headline” markets that always appear first
     const majorMarkets = [
     "Strasbourg Christmas Market",
     "Colmar Christmas Market",
@@ -704,7 +696,6 @@
     "Winter Magic at Europa-Park"
     ];
 
-    // --- Helper: Haversine distance (km) ---
     function distanceKm([lat1, lon1], [lat2, lon2]) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -716,22 +707,18 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // --- Sort markets ---
     const sortedMarkets = [...markets].sort((a, b) => {
     const aIsMajor = majorMarkets.includes(a.name);
     const bIsMajor = majorMarkets.includes(b.name);
 
-    // 1️⃣ Major markets come first
     if (aIsMajor && !bIsMajor) return -1;
     if (bIsMajor && !aIsMajor) return 1;
 
-    // 2️⃣ Otherwise sort by distance
     const distA = distanceKm(ourBusiness.coords, a.coords);
     const distB = distanceKm(ourBusiness.coords, b.coords);
     return distA - distB;
     });
 
-    // --- Everything below remains as in your file ---
     function formatDate(dateStr) {
     const d = new Date(dateStr);
     const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -740,7 +727,6 @@
     return `${mm}-${dd}-${yyyy}`;
     }
 
-    // Initialize map
     const map = L.map("map").setView(ourBusiness.coords, 9);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; OpenStreetMap contributors'
@@ -752,7 +738,6 @@
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
-    // House marker
     const houseMarker = L.marker(ourBusiness.coords, {
         icon: L.icon({
         iconUrl: "images/star.svg",
@@ -761,7 +746,6 @@
     }).addTo(map).bindPopup(`<strong>${ourBusiness.name}</strong><br>${ourBusiness.address}`);
     markers.push(houseMarker);
 
-    // Red markers for markets
     data.forEach(m => {
         const popupContent = `
         <strong>${m.name}</strong><br>
@@ -797,11 +781,9 @@
     });
     }
 
-    // Use sortedMarkets for default display
     renderTable(sortedMarkets);
     renderMarkers(sortedMarkets);
 
-    // --- Sorting & filtering logic (unchanged) ---
     document.querySelectorAll("th[data-column]").forEach(th => {
     th.addEventListener("click", () => {
         const column = th.getAttribute("data-column");
@@ -856,13 +838,12 @@
   </script>
 
     <script>
-    // Toggle the mobile menu
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('nav ul');
 
     menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open'); // Toggle the 'open' class on the <ul> element
-      menuToggle.classList.toggle('active'); // Toggle the active class on the menu icon
+      navLinks.classList.toggle('open');
+      menuToggle.classList.toggle('active');
     });
   </script>
   
