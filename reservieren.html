@@ -602,33 +602,46 @@ window.onload = function() {
 </script>
 
 <script>
-(function () {
-  const select = document.getElementById("countryCode");
-  let buffer = "";
-  let timer;
+  (function () {
+    const select = document.getElementById("countryCode");
+    let buffer = "";
+    let timer;
 
-  function extractCountry(optionText) {
-    const parts = optionText.trim().split(" ");
-    return parts.slice(2).join(" ").toLowerCase();
-  }
-
-  select.addEventListener("keydown", function (e) {
-    if (e.key.length !== 1) return;
-
-    buffer += e.key.toLowerCase();
-
-    clearTimeout(timer);
-    timer = setTimeout(() => (buffer = ""), 700);
-
-    for (let option of select.options) {
-      const country = extractCountry(option.textContent);
-      if (country.startsWith(buffer)) {
-        select.value = option.value;
-        break;
-      }
+    function extractCountry(optionText) {
+      const parts = optionText.trim().split(" ");
+      return parts.slice(2).join(" ").toLowerCase(); 
     }
-  });
-})();
+
+    select.addEventListener("keydown", function (e) {
+      if (e.key.length !== 1 && e.key !== "Backspace") return; 
+
+      if (e.key === "Backspace") {
+        buffer = buffer.slice(0, -1); 
+      } else {
+        buffer += e.key.toLowerCase(); 
+      }
+
+      clearTimeout(timer);
+      timer = setTimeout(() => (buffer = ""), 700); 
+
+      let matched = false;
+
+      for (let option of select.options) {
+        const country = extractCountry(option.textContent);
+
+        if (country.startsWith(buffer)) {
+          select.value = option.value; 
+          matched = true;
+          option.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          break;
+        }
+      }
+
+      if (!matched && buffer === "") {
+        select.value = "";
+      }
+    });
+  })();
 </script>
 
 </body>
