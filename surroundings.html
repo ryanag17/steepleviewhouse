@@ -18,7 +18,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f8f9fa;
+      background: #ffffff;
       margin: 0;
       padding-top: 100px;
     }
@@ -33,16 +33,19 @@
       text-align: center;
       margin-bottom: 40px;
     }
+
     .page-intro h1 {
       font-size: 2.2em;
       margin-bottom: 10px;
       color: #2b4d2b;
     }
+
     .page-intro h2 {
       color: #3a7a3a;
       margin-top: 10px;
       font-weight: normal;
     }
+
     .page-intro p {
       font-size: 1.1em;
       color: #555;
@@ -51,6 +54,10 @@
       line-height: 1.6;
     }
 
+    /* =========================
+      FILTERS (MATCH GLOBAL STYLE)
+      ========================= */
+
     .filters {
       display: flex;
       justify-content: center;
@@ -58,6 +65,42 @@
       gap: 12px;
       margin-bottom: 30px;
     }
+
+    .filters input,
+    .filters select {
+      padding: 0.75rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 25px;
+      border: 2px solid #2e5c3c;
+      background: #fff;
+      color: #333;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .filters input:focus,
+    .filters select:focus {
+      border-color: #1d3f29;
+      box-shadow: 0 0 6px rgba(46, 92, 60, 0.3);
+    }
+
+    .filters button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      border: none;
+      background-color: #2e5c3c;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filters button:hover {
+      background-color: #1d3f29;
+      transform: translateY(-1px);
+    }
+
+    /* ========================= */
 
     #map {
       height: 600px;
@@ -74,7 +117,7 @@
     }
 
     /* =========================
-      CLEAN FLIP CARD SYSTEM
+      FLIP CARD SYSTEM
       ========================= */
 
     .place-card {
@@ -89,8 +132,8 @@
       width: 100%;
       height: 100%;
       position: relative;
+      transition: transform 0.7s;
       transform-style: preserve-3d;
-      transition: transform 0.6s ease;
     }
 
     .place-card:hover .card-inner,
@@ -101,69 +144,64 @@
     .card-front,
     .card-back {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       border-radius: 12px;
       overflow: hidden;
       backface-visibility: hidden;
+      background-size: cover;
+      background-position: center;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
       padding: 20px;
-      color: white;
     }
 
-    /* IMAGE + GRADIENT OVERLAY (NO BUGGY ::before) */
-    .card-front {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    .card-back {
-      transform: rotateY(180deg);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      overflow-y: auto;
-    }
-
-    /* Gradient overlay using background instead of pseudo element */
-    .card-front::after,
-    .card-back::after {
+    /* Overlay */
+    .card-front::before,
+    .card-back::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.8),
-        rgba(0,0,0,0.4),
-        rgba(0,0,0,0.2)
-      );
+      background: rgba(0,0,0,0.55);
+      z-index: 1;
     }
 
     .card-front *,
     .card-back * {
       position: relative;
       z-index: 2;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
 
-    /* TEXT STYLING */
+    /* FRONT */
+    .card-front {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
     .card-front h3 {
       font-size: 2rem;
       font-weight: 800;
       margin: 0;
     }
 
+    /* BACK */
+    .card-back {
+      transform: rotateY(180deg);
+      justify-content: flex-start;
+      overflow-y: auto;
+      padding-top: 15px;
+      scrollbar-width: thin;
+    }
+
     .card-back h3 {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
+      margin-top: 0;
     }
 
     .card-back p {
-      font-size: 0.9rem;
-      line-height: 1.4;
-      margin: 4px 0;
+      font-size: 14px;
+      margin: 5px 0;
     }
 
     .card-back a {
@@ -176,7 +214,7 @@
       margin-top: 60px;
       text-align: center;
     }
-</style>
+  </style>
 </head>
 
 <body class="innerpage">
@@ -871,7 +909,6 @@ function renderPlaceList(data) {
 
     front.innerHTML = `
       <h3>${place.name}</h3>
-      ${place.website ? `<p><a href="${place.website}" target="_blank">Website</a></p>` : ""}
     `;
 
     back.innerHTML = `
