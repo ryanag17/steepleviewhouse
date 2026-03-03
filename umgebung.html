@@ -18,8 +18,9 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f8f9fa;
+      background: #ffffff;
       margin: 0;
+      padding-top: 100px;
     }
 
     main {
@@ -32,16 +33,19 @@
       text-align: center;
       margin-bottom: 40px;
     }
+
     .page-intro h1 {
       font-size: 2.2em;
       margin-bottom: 10px;
       color: #2b4d2b;
     }
+
     .page-intro h2 {
       color: #3a7a3a;
       margin-top: 10px;
       font-weight: normal;
     }
+
     .page-intro p {
       font-size: 1.1em;
       color: #555;
@@ -50,6 +54,7 @@
       line-height: 1.6;
     }
 
+    /* FILTERS */
     .filters {
       display: flex;
       justify-content: center;
@@ -57,32 +62,39 @@
       gap: 12px;
       margin-bottom: 30px;
     }
+
     .filters input,
     .filters select {
-      padding: 10px 14px;
-      font-size: 15px;
-      border: 2px solid #3a7a3a;
+      padding: 0.75rem 1.2rem;
+      font-size: 1rem;
       border-radius: 25px;
-      outline: none;
+      border: 2px solid #2e5c3c;
       background: #fff;
-      transition: 0.2s;
+      color: #333;
+      outline: none;
+      transition: all 0.25s ease;
     }
+
     .filters input:focus,
     .filters select:focus {
-      box-shadow: 0 0 5px rgba(58, 122, 58, 0.5);
+      border-color: #1d3f29;
+      box-shadow: 0 0 6px rgba(46, 92, 60, 0.3);
     }
+
     .filters button {
-      padding: 10px 18px;
-      font-size: 15px;
-      border: 2px solid #3a7a3a;
+      padding: 0.75rem 1.5rem;
       border-radius: 25px;
-      background: #3a7a3a;
+      border: none;
+      background-color: #2e5c3c;
       color: white;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.3s ease;
     }
+
     .filters button:hover {
-      background: #2e612e;
+      background-color: #1d3f29;
+      transform: translateY(-1px);
     }
 
     #map {
@@ -90,12 +102,6 @@
       width: 100%;
       border-radius: 10px;
       margin-bottom: 40px;
-      position: relative;
-      z-index: 0;
-    }
-
-    .leaflet-control-container {
-      z-index: 1 !important;
     }
 
     .place-list {
@@ -105,68 +111,111 @@
       justify-items: center;
     }
 
+    /* CARD */
     .place-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 350px;
-      text-align: left;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-      color: white;
-      min-height: 220px;
-      padding: 18px 22px;
+      height: 300px; /* slightly bigger so everything fits */
+      perspective: 1000px;
+      cursor: pointer;
     }
 
-    .place-card::before {
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.7s;
+      transform-style: preserve-3d;
+    }
+
+    .place-card:hover .card-inner,
+    .place-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    /* DARK OVERLAY */
+    .card-front::before,
+    .card-back::before {
       content: "";
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.55);
-      z-index: 0;
+      z-index: 1;
     }
 
-    .place-card * {
+    .card-front *,
+    .card-back * {
       position: relative;
-      z-index: 1;
+      z-index: 2;
+      color: white;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
 
-    .place-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    /* FRONT */
+    .card-front {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
 
-    .place-card h3 {
-      margin-top: 0;
-      color: #fff;
+    .card-front h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0;
     }
-    .place-card p {
-      margin: 6px 0;
-      font-size: 14px;
-      color: #fff;
+
+    /* BACK */
+    .card-back {
+      transform: rotateY(180deg);
+      justify-content: space-between;
+      overflow: hidden; /* 🚫 NO SCROLL */
     }
-    .place-card a {
-      color: #fff;
-      text-decoration: underline;
+
+    .card-back h3 {
+      font-size: 1.2rem;
+      margin: 0 0 5px 0;
+    }
+
+    .card-back p {
+      font-size: 0.8rem;
+      line-height: 1.3;
+      margin: 2px 0;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-back a {
+      font-size: 0.8rem;
       word-break: break-word;
-      overflow-wrap: anywhere;
-      display: inline-block;
-      max-width: 100%;
-    }
-    .place-card a:hover {
-      color: #d4f0d4;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     footer {
       margin-top: 60px;
       text-align: center;
-    }
-
-    body {
-      padding-top: 100px;
     }
   </style>
 </head>
@@ -845,29 +894,42 @@ function renderPlaceList(data) {
     const card = document.createElement("div");
     card.className = "place-card";
 
+    const inner = document.createElement("div");
+    inner.className = "card-inner";
+
+    const front = document.createElement("div");
+    front.className = "card-front";
+
+    const back = document.createElement("div");
+    back.className = "card-back";
+
+    // Background image for both sides
     if (place.image) {
-      card.style.backgroundImage = `url(${place.image})`;
-      card.style.backgroundSize = "cover";
-      card.style.backgroundPosition = "center";
-    } else {
-      card.style.backgroundColor = "#fff";
-      card.style.color = "#333";
+      front.style.backgroundImage = `url(${place.image})`;
+      back.style.backgroundImage = `url(${place.image})`;
     }
 
-    let html = `
+    front.innerHTML = `
+      <h3>${place.name}</h3>
+    `;
+
+    back.innerHTML = `
       <h3>${place.name}</h3>
       <p><b>Kategorie:</b> ${place.category}</p>
       <p><b>Stadt:</b> ${place.city}</p>
       <p><b>Adresse:</b> ${place.address}</p>
       <p>${place.description}</p>
+      ${place.website ? `<p><a href="${place.website}" target="_blank">Website</a></p>` : ""}
     `;
-    if (place.website) {
-      html += `<p><a href="${place.website}" target="_blank">Website</a></p>`;
-    }
 
-    card.innerHTML = html;
+    inner.appendChild(front);
+    inner.appendChild(back);
+    card.appendChild(inner);
 
+    // Mobile support (tap to flip)
     card.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+
       const matching = markers.find((m) => {
         const latlng = m.getLatLng();
         return latlng.lat === place.coords[0] && latlng.lng === place.coords[1];
