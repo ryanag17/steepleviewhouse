@@ -115,7 +115,7 @@
     .place-card {
       width: 100%;
       max-width: 350px;
-      height: 300px; /* slightly bigger so everything fits */
+      height: 300px; 
       perspective: 1000px;
       cursor: pointer;
     }
@@ -182,7 +182,7 @@
     .card-back {
       transform: rotateY(180deg);
       justify-content: space-between;
-      overflow: hidden; /* 🚫 NO SCROLL */
+      overflow: hidden;
     }
 
     .card-back h3 {
@@ -194,7 +194,6 @@
       font-size: 0.8rem;
       line-height: 1.3;
       margin: 2px 0;
-
       display: -webkit-box;
       -webkit-line-clamp: 5;
       line-clamp: 5;
@@ -204,8 +203,11 @@
 
     .card-back a {
       font-size: 0.8rem;
+      color: #00aaff; /* clickable blue */
+      text-decoration: underline;
+      text-shadow: none;
+      cursor: pointer;
       word-break: break-word;
-
       display: -webkit-box;
       -webkit-line-clamp: 2;
       line-clamp: 2;
@@ -887,113 +889,79 @@
       });
     }
 
-function renderPlaceList(data) {
-  const list = document.getElementById("placeList");
-  list.innerHTML = "";
+   function renderPlaceList(data){
+      const list = document.getElementById("placeList");
+      list.innerHTML="";
+      data.forEach(place=>{
+        const card=document.createElement("div"); card.className="place-card";
+        const inner=document.createElement("div"); inner.className="card-inner";
+        const front=document.createElement("div"); front.className="card-front";
+        const back=document.createElement("div"); back.className="card-back";
 
-  data.forEach((place) => {
-    const card = document.createElement("div");
-    card.className = "place-card";
+        if(place.image){ front.style.backgroundImage=`url(${place.image})`; back.style.backgroundImage=`url(${place.image})`; }
 
-    const inner = document.createElement("div");
-    inner.className = "card-inner";
+        front.innerHTML=`<h3>${place.name}</h3>`;
+        back.innerHTML=`
+          <h3>${place.name}</h3>
+          <p><b>Category:</b> ${place.category}</p>
+          <p><b>City:</b> ${place.city}</p>
+          <p><b>Address:</b> ${place.address}</p>
+          <p>${place.description}</p>
+          ${place.website?`<p><a href="${place.website}" target="_blank">Website</a></p>`:""}
+        `;
 
-    const front = document.createElement("div");
-    front.className = "card-front";
+        inner.appendChild(front); inner.appendChild(back); card.appendChild(inner);
 
-    const back = document.createElement("div");
-    back.className = "card-back";
+        // Only flip card if NOT clicking a link
+        card.addEventListener("click",(e)=>{
+          if(e.target.tagName.toLowerCase() === 'a') return;
+          card.classList.toggle("flipped");
 
-    // Background image for both sides
-    if (place.image) {
-      front.style.backgroundImage = `url(${place.image})`;
-      back.style.backgroundImage = `url(${place.image})`;
+          const matching=markers.find(m=>{
+            const latlng=m.getLatLng();
+            return latlng.lat===place.coords[0] && latlng.lng===place.coords[1];
+          });
+          if(matching){ matching.openPopup(); map.panTo(matching.getLatLng()); }
+        });
+
+        list.appendChild(card);
+      });
     }
 
-    front.innerHTML = `
-      <h3>${place.name}</h3>
-    `;
+    const filterNameEl=document.getElementById("filterName");
+    const filterCategoryEl=document.getElementById("filterCategory");
+    const filterCityEl=document.getElementById("filterCity");
+    const clearBtn=document.getElementById("clearFilters");
 
-    back.innerHTML = `
-      <h3>${place.name}</h3>
-      <p><b>Category:</b> ${place.category}</p>
-      <p><b>City:</b> ${place.city}</p>
-      <p><b>Address:</b> ${place.address}</p>
-      <p>${place.description}</p>
-      ${place.website ? `<p><a href="${place.website}" target="_blank">Website</a></p>` : ""}
-    `;
-
-    inner.appendChild(front);
-    inner.appendChild(back);
-    card.appendChild(inner);
-
-    // Mobile support (tap to flip)
-    card.addEventListener("click", (e) => {
-      // Prevent flipping if a link was clicked
-      if (e.target.tagName.toLowerCase() === 'a') {
-        return; // Let the link work normally
-      }
-
-      card.classList.toggle("flipped");
-
-      const matching = markers.find((m) => {
-        const latlng = m.getLatLng();
-        return latlng.lat === place.coords[0] && latlng.lng === place.coords[1];
-      });
-      if (matching) {
-        matching.openPopup();
-        map.panTo(matching.getLatLng());
-      }
-    });
-
-    list.appendChild(card);
-  });
-}
-
-
-    const filterNameEl = document.getElementById("filterName");
-    const filterCategoryEl = document.getElementById("filterCategory");
-    const filterCityEl = document.getElementById("filterCity");
-    const clearBtn = document.getElementById("clearFilters");
-
-    [filterNameEl, filterCityEl].forEach((el) =>
-      el.addEventListener("input", applyFilters)
-    );
-    filterCategoryEl.addEventListener("change", applyFilters);
-    clearBtn.addEventListener("click", () => {
-      filterNameEl.value = "";
-      filterCategoryEl.value = "";
-      filterCityEl.value = "";
+    [filterNameEl,filterCityEl].forEach(el=>el.addEventListener("input",applyFilters));
+    filterCategoryEl.addEventListener("change",applyFilters);
+    clearBtn.addEventListener("click",()=>{
+      filterNameEl.value="";
+      filterCategoryEl.value="";
+      filterCityEl.value="";
       applyFilters();
     });
 
-    function applyFilters() {
-      const nameFilter = filterNameEl.value.toLowerCase();
-      const categoryFilter = filterCategoryEl.value;
-      const cityFilter = filterCityEl.value.toLowerCase();
+    function applyFilters(){
+      const nameFilter=filterNameEl.value.toLowerCase();
+      const categoryFilter=filterCategoryEl.value;
+      const cityFilter=filterCityEl.value.toLowerCase();
 
-      const filtered = places.filter((place) => {
-        const matchesName = place.name.toLowerCase().includes(nameFilter);
-        const matchesCategory = categoryFilter
-          ? place.category === categoryFilter
-          : true;
-        const matchesCity = place.city.toLowerCase().includes(cityFilter);
+      const filtered=places.filter(place=>{
+        const matchesName=place.name.toLowerCase().includes(nameFilter);
+        const matchesCategory=categoryFilter?place.category===categoryFilter:true;
+        const matchesCity=place.city.toLowerCase().includes(cityFilter);
         return matchesName && matchesCategory && matchesCity;
       });
 
       renderMarkers(filtered);
       renderPlaceList(filtered);
     }
-  </script>
 
-  <script>
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('nav ul');
+    const menuToggle=document.querySelector('.menu-toggle');
+    const navLinks=document.querySelector('nav ul');
+    menuToggle.addEventListener('click',()=>{ navLinks.classList.toggle('open'); menuToggle.classList.toggle('active'); });
 
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      menuToggle.classList.toggle('active');
-    });
   </script>
 
 </body>
