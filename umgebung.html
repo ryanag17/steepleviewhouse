@@ -142,6 +142,7 @@
       overflow: hidden;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
+      transform-style: preserve-3d;
       background-size: cover;
       background-position: center;
       display: flex;
@@ -176,21 +177,29 @@
     }
 
     .card-front h3 {
-      font-size: 2rem;
+      font-size: 2rem;       /* larger */
       font-weight: 800;
       margin: 0;
+      color: #ffffff;         /* white */
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      text-align: center;
     }
 
     /* BACK */
     .card-back {
       transform: rotateY(180deg);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       justify-content: space-between;
       overflow: hidden;
     }
 
     .card-back h3 {
       font-size: 1.2rem;
+      font-weight: 700;
       margin: 0 0 5px 0;
+      color: #ffffff;
+      text-shadow: none;
     }
 
     .card-back p {
