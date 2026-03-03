@@ -927,7 +927,12 @@ function renderPlaceList(data) {
     card.appendChild(inner);
 
     // Mobile support (tap to flip)
-    card.addEventListener("click", () => {
+    card.addEventListener("click", (e) => {
+      // Prevent flipping if a link was clicked
+      if (e.target.tagName.toLowerCase() === 'a') {
+        return; // Let the link work normally
+      }
+
       card.classList.toggle("flipped");
 
       const matching = markers.find((m) => {
